@@ -3,6 +3,7 @@ package Test;
 
 import Pages.admin.AddProductsPage;
 import Pages.admin.Categories;
+import Pages.admin.Product;
 import Pages.admin.ViewProductPage;
 import Pages.user.HomePage;
 import Pages.user.LoginPage;
@@ -35,13 +36,16 @@ public class TC_08 {
         // Step 4
         viewProductPage.clickAddProductButton();
         // Step 5 ~ Step 11
-
+        String imagePath = System.getProperty("user.dir") + "/src/main/java/resources/Screenshot_2025-04-21_212042.png";
         String nameProduct = new Random().nextInt(1000) + "Test Product";
-        addProductsPage.addProduct(nameProduct,
-                "100.00", "10", "5", "Apple",
-                "This is a test product description");
-        // Step 12
 
+        product = new Product(nameProduct,
+                "100.00", "10", "5", "Apple",
+                "This is a test product description", imagePath);
+
+        addProductsPage.addProduct(product);
+
+        // Step 12
         softAssert.assertEquals(addProductsPage.getAlertMessageSuccess(),
                 "Cập nhật thành công", "Không tìm thấy thông báo thành công"
         );
@@ -52,7 +56,6 @@ public class TC_08 {
         int newIdProduct = viewProductPage.getIdProduct();
         softAssert.assertTrue(newIdProduct > idProduct,
                 "Sản phẩm mới được thêm vào list Prodcut thành công");
-
 
         softAssert.assertAll();
     }
@@ -72,6 +75,7 @@ public class TC_08 {
         loginPage = new LoginPage(driver);
         homePage = new HomePage(driver);
 
+
     }
 
     @AfterMethod
@@ -86,6 +90,7 @@ public class TC_08 {
     ViewProductPage viewProductPage;
     HomePage homePage;
     LoginPage loginPage;
+    Product product;
 
 
 }

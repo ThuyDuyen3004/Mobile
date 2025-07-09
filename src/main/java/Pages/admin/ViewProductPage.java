@@ -11,6 +11,7 @@ public class ViewProductPage {
     private WebDriverWait wait;
     private By addProductButtonLocator = By.xpath("//*[@class='box-header']/a");
     private By idProductsLocator = By.xpath("//*[@id='view']/tbody/tr[1]/td[1]");
+
     public ViewProductPage(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(10));

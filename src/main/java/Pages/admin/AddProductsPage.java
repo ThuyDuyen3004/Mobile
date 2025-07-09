@@ -12,13 +12,14 @@ import java.time.Duration;
 public class AddProductsPage {
     private WebDriver driver;
     private WebDriverWait wait;
-    private By nameInputLocator = By.xpath("//*[@class='form-group']//input[@name='name']");
-    private By priceInputLocator = By.xpath("//*[@class='form-group']//input[@name='price']");
-    private By qualityInputLocator = By.xpath("//*[@class='form-group']//input[@name='quality']");
-    private By salesInputLocator = By.xpath("//*[@class='form-group']//input[@name='sale']");
-    private By manufacturesLocator = By.xpath("//*[@class='form-group']//select[@name='manufactures']");
+    private By nameInputLocator = By.xpath("//input[@name='name']");
+    private By priceInputLocator = By.xpath("//input[@name='price']");
+    private By qualityInputLocator = By.xpath("//input[@name='quality']");
+    private By salesInputLocator = By.xpath("//input[@name='sale']");
+    private By manufacturesLocator = By.xpath("//select[@name='manufactures']");
     private By saveButtonLocator = By.xpath("//button[@type='submit' and contains(text(), 'SAVE')]");
     private By cancelButtonLocator = By.xpath("//button[@type='button' and contains(text(), 'Cancel')]");
+    private By uploadImageLocator = By.xpath("//input[@type='file']");
 
     private By alertMessageSuccessLocator = By.xpath("//p[contains(@class, 'alert-success')]");
 
@@ -84,23 +85,35 @@ public class AddProductsPage {
     public void uploadImage(String imagePath) {
 
         // 1. Tìm phần tử input để tải lên hình ảnh
-        WebElement uploadInput = driver.findElement(By.xpath("//input[@type='file']"));
+        WebElement uploadInput = driver.findElement(uploadImageLocator);
         // 2. Nhập đường dẫn hình ảnh vào input
 
         uploadInput.sendKeys(imagePath);
     }
 
-    public void addProduct(String name, String price, String quality, String sales, String manufacture, String specification) throws InterruptedException {
-        enterName(name);
-        enterPrice(price);
-        enterQuality(quality);
-        enterSales(sales);
-        selectManufactureByText(manufacture);
-        String imagePath = System.getProperty("user.dir") + "/src/main/java/resources/Screenshot_2025-04-21_212042.png";
-        uploadImage(imagePath); // Cập nhật đường dẫn hình ảnh nếu cần
-        fillSpecification(specification);
+//    public void addProduct(String name, String price, String quality, String sales, String manufacture, String specification) throws InterruptedException {
+//        enterName(name);
+//        enterPrice(price);
+//        enterQuality(quality);
+//        enterSales(sales);
+//        selectManufactureByText(manufacture);
+//        String imagePath = System.getProperty("user.dir") + "/src/main/java/resources/Screenshot_2025-04-21_212042.png";
+//        uploadImage(imagePath); // Cập nhật đường dẫn hình ảnh nếu cần
+//        fillSpecification(specification);
+//        clickSaveButton();
+//        Thread.sleep(3000);
+//
+//    }
+    public void addProduct(Product product) throws InterruptedException {
+        enterName(product.getName());
+        enterPrice(product.getPrice());
+        enterQuality(product.getQuality());
+        enterSales(product.getSales());
+        selectManufactureByText(product.getManufacture());
+        uploadImage(product.getImagePath());
+        fillSpecification(product.getSpecification());
         clickSaveButton();
         Thread.sleep(3000);
-
     }
+
 }
