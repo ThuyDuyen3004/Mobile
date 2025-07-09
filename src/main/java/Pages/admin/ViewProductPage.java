@@ -14,7 +14,7 @@ public class ViewProductPage {
 
     public ViewProductPage(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(10));
+        this.wait = wait;
     }
     public int getIdProduct() {
         WebElement idProductElement = wait.until(ExpectedConditions.visibilityOfElementLocated(idProductsLocator));

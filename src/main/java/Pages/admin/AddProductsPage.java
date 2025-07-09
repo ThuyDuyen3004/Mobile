@@ -12,20 +12,30 @@ import java.time.Duration;
 public class AddProductsPage {
     private WebDriver driver;
     private WebDriverWait wait;
-    private By nameInputLocator = By.xpath("//input[@name='name']");
-    private By priceInputLocator = By.xpath("//input[@name='price']");
-    private By qualityInputLocator = By.xpath("//input[@name='quality']");
-    private By salesInputLocator = By.xpath("//input[@name='sale']");
-    private By manufacturesLocator = By.xpath("//select[@name='manufactures']");
+    private By nameInputLocator = By.name("name");
+    private By priceInputLocator = By.name("price");
+    private By qualityInputLocator = By.name("quality");
+    private By salesInputLocator = By.name("sale");
+    private By manufacturesLocator = By.name("manufactures");
     private By saveButtonLocator = By.xpath("//button[@type='submit' and contains(text(), 'SAVE')]");
     private By cancelButtonLocator = By.xpath("//button[@type='button' and contains(text(), 'Cancel')]");
     private By uploadImageLocator = By.xpath("//input[@type='file']");
 
     private By alertMessageSuccessLocator = By.xpath("//p[contains(@class, 'alert-success')]");
+    private By alertMessageErrorLocator = By.xpath("//div[@class='box-body']");
 
     public AddProductsPage(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = wait;
+    }
+    public String getAlertMessageError() {
+        WebElement alertMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(alertMessageErrorLocator));
+        return alertMessage.getText().trim().split("\n")[0];
+    }
+    public String getSecondDangerTextByLabel(String labelText) {
+        String xpath = String.format("//label[contains(text(), '%s')]/span[@class='text-danger'][2]", labelText);
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+        return element.getText().trim();
     }
 
     public String getAlertMessageSuccess() {
