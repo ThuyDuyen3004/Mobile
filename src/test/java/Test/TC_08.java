@@ -40,7 +40,7 @@ public class TC_08 {
         String nameProduct = new Random().nextInt(1000) + "Test Product";
 
         product = new Product(nameProduct,
-                "100.00", "10", "5", "Apple",
+                "100", "10", "5", "Apple",
                 "This is a test product description", imagePath);
 
         addProductsPage.addProduct(product);
@@ -52,10 +52,18 @@ public class TC_08 {
 
 
         categories.goToCategoryByName("Products");
+        String nameProductAfterAdd = viewProductPage.getNameProduct();
+        String priceProductAfterAdd = viewProductPage.getPriceProduct();
+        String qualityProductAfterAdd = viewProductPage.getQualityProduct();
+        String saleProductAfterAdd = viewProductPage.getSaleProduct();
+        String manufactureProductAfterAdd = viewProductPage.getMunafacturesProduct();
 
-        int newIdProduct = viewProductPage.getIdProduct();
-        softAssert.assertTrue(newIdProduct > idProduct,
-                "Sản phẩm mới được thêm vào list Prodcut thành công");
+        softAssert.assertTrue(product.getName().equals(nameProductAfterAdd) &&
+                        product.getPrice().equals(priceProductAfterAdd) && product.getQuality().equals(qualityProductAfterAdd)  &&
+                        product.getSales().equals(saleProductAfterAdd)  && product.getManufacture().equals(manufactureProductAfterAdd),
+                "Sản phẩm mới được thêm vào list Prodcut không thành công");
+
+
 
         softAssert.assertAll();
     }

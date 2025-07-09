@@ -1,5 +1,6 @@
 package Pages.admin;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,7 +17,7 @@ public class Categories {
         this.driver = driver;
         this.wait = wait;
     }
-
+    @Step("Go to category by name: {categoryName}")
     public void goToCategoryByName(String categoryName) {
         List<WebElement> categories = driver.findElements(categoriesLocator);
         for (WebElement category : categories) {
