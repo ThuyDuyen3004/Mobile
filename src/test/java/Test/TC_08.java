@@ -20,7 +20,7 @@ import java.time.Duration;
 import java.util.Random;
 
 public class TC_08 {
-    @Test
+    @Test (description = "TC_08 - Add Product Successfully")
     public void testAddProductSuccessfully() throws InterruptedException {
         // Step 1
         driver.get(Constants.URL);

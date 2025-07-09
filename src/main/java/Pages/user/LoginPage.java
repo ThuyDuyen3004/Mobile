@@ -33,10 +33,11 @@ public class LoginPage {
         driver.findElement(loginButtonLocator).click();
     }
 
-    public void login(String username, String password) {
+    public void login(String username, String password) throws InterruptedException {
         enterUsername(username);
         enterPassword(password);
         clickLoginButton();
+        Thread.sleep(2000);
     }
 
 }
