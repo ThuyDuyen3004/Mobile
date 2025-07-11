@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="ParallelSuite" parallel="classes" thread-count="2">
+    <test name="RunAllTests">
+        <classes>
+            <class name="Test.TC01"/>
+            <class name="Test.TC02"/>
+            <class name="Test.TC03"/>
+            <class name="Test.TC04"/>
+            <class name="Test.TC05"/>
+            <class name="Test.TC06"/>
+            <class name="Test.TC07"/>
+        </classes>
+    </test>
+</suite>
