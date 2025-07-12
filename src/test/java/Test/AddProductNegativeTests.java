@@ -5,6 +5,7 @@ import Pages.admin.Product;
 import Pages.admin.ViewProductPage;
 import Pages.user.HomePage;
 import Pages.user.LoginPage;
+import com.github.javafaker.Faker;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -13,10 +14,10 @@ import org.testng.asserts.SoftAssert;
 import utils.Constants;
 
 import java.time.Duration;
-import java.util.Random;
+
 public class AddProductNegativeTests {
 
-    @Test(priority = 1)
+    @Test(description = "TC09 - Add Product with Empty Fields")
     public void TC09_emptyFields() throws InterruptedException {
 
         SoftAssert softAssert = new SoftAssert();
@@ -50,16 +51,21 @@ public class AddProductNegativeTests {
         softAssert.assertAll();
     }
 
-    @Test(priority = 2)
+    @Test(description = "TC10 - Add Product with Invalid Price")
     public void TC10_invalidPrice() throws InterruptedException {
         SoftAssert softAssert = new SoftAssert();
 
-        String imagePath = System.getProperty("user.dir") + "/src/main/java/resources/Screenshot_2025-04-21_212042.png";
-        String nameProduct = new Random().nextInt(1000) + "Test Product";
+        String imagePath = Constants.IMAGE_PATH_PNG;
+        String nameProduct = faker.lorem().characters(7);
+        String price = "abc"; // Invalid price
+        String quality = faker.number().digits(3).toString();
+        String sale = faker.number().digits(2).toString();
+        String manufacture = "Apple";
+        String specification = faker.gameOfThrones().character();
 
         product = new Product(nameProduct,
-                "abc", "500", "50", "Apple",
-                "hihihi", imagePath);
+                price, quality, sale, manufacture,
+                specification, imagePath);
 
         addProductsPage.addProduct(product);
 
@@ -73,16 +79,21 @@ public class AddProductNegativeTests {
         softAssert.assertAll();
     }
 
-    @Test(priority = 3)
+    @Test(description = "TC11 - Add Product with Negative Quantity")
     public void TC11_negativeQuantity() throws InterruptedException {
         SoftAssert softAssert = new SoftAssert();
 
-        String imagePath = System.getProperty("user.dir") + "/src/main/java/resources/Screenshot_2025-04-21_212042.png";
-        String nameProduct = new Random().nextInt(1000) + "Test Product";
+        String imagePath = Constants.IMAGE_PATH_PNG;
+        String nameProduct = faker.lorem().characters(7);
+        String price = faker.number().digits(5).toString();
+        String quality = String.valueOf((faker.number().numberBetween(-999, -100))); // Negative quality
+        String sale = faker.number().digits(2).toString();
+        String manufacture = "Apple";
+        String specification = faker.gameOfThrones().character();
 
         product = new Product(nameProduct,
-                "abc", "-10", "50", "Apple",
-                "hihihi", imagePath);
+                price, quality, sale, manufacture,
+                specification, imagePath);
 
         addProductsPage.addProduct(product);
 
@@ -93,16 +104,21 @@ public class AddProductNegativeTests {
         softAssert.assertAll();
     }
 
-    @Test(priority = 4)
+    @Test(description = "TC12 - Add Product with Invalid Image Type")
     public void TC12_invalidImageType() throws InterruptedException {
         SoftAssert softAssert = new SoftAssert();
 
-        String imagePath = System.getProperty("user.dir") + "/src/main/java/resources/2025-05-18_15h14_09.pdf";
-        String nameProduct = new Random().nextInt(1000) + "Test Product";
+        String imagePath = Constants.IMAGE_PATH_PDF;
+        String nameProduct = faker.lorem().characters(7);
+        String price = faker.number().digits(5).toString();
+        String quality = faker.number().digits(2).toString();
+        String sale = faker.number().digits(2).toString();
+        String manufacture = "Apple";
+        String specification = faker.gameOfThrones().character();
 
         product = new Product(nameProduct,
-                "500", "10", "50", "Apple",
-                "hihihi", imagePath);
+                price, quality, sale, manufacture,
+                specification, imagePath);
 
         addProductsPage.addProduct(product);
         softAssert.assertEquals(addProductsPage.getSecondDangerTextByLabel("Image"),
@@ -115,16 +131,21 @@ public class AddProductNegativeTests {
         softAssert.assertAll();
     }
 
-    @Test(priority = 5)
+    @Test(description = "TC13 - Add Product with Empty Specification")
     public void TC13_emptySpecification() throws InterruptedException {
         SoftAssert softAssert = new SoftAssert();
 
-        String imagePath = System.getProperty("user.dir") + "/src/main/java/resources/Screenshot_2025-04-21_212042.png";
-        String nameProduct = new Random().nextInt(1000) + "Test Product";
+        String imagePath = Constants.IMAGE_PATH_PNG;
+        String nameProduct = faker.lorem().characters(7);
+        String price = faker.number().digits(5).toString();
+        String quality = faker.number().digits(2).toString();
+        String sale = faker.number().digits(2).toString();
+        String manufacture = "Apple";
+        String specification = ""; // Empty specification
 
         product = new Product(nameProduct,
-                "500", "10", "50", "Apple",
-                "", imagePath);
+                price, quality, sale, manufacture,
+                specification, imagePath);
 
         addProductsPage.addProduct(product);
         softAssert.assertEquals(addProductsPage.getSecondDangerTextByLabel("Specification"),
@@ -149,7 +170,7 @@ public class AddProductNegativeTests {
         viewProductPage = new ViewProductPage(driver, wait);
         loginPage = new LoginPage(driver);
         homePage = new HomePage(driver);
-
+        faker = new Faker();
         // Step 1
         driver.get(Constants.URL);
         homePage.OpenLoginForm();
@@ -179,5 +200,7 @@ public class AddProductNegativeTests {
     HomePage homePage;
     LoginPage loginPage;
     Product product;
+    Faker faker;
+
 
 }

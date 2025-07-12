@@ -137,8 +137,9 @@ public class AddProductsPage {
         selectManufactureByText(product.getManufacture());
         uploadImage(product.getImagePath());
         fillSpecification(product.getSpecification());
-        clickSaveButton();
         Thread.sleep(3000);
+        clickSaveButton();
+
     }
 
 }

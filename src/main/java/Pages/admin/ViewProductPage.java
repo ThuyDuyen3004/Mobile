@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class ViewProductPage {
     private WebDriver driver;
     private WebDriverWait wait;
+
     private By addProductButtonLocator = By.xpath("//*[@class='box-header']/a");
     private By idProductsLocator = By.xpath("//*[@id='view']/tbody/tr[1]/td[1]");
     private By nameProductsLocator = By.xpath("//*[@id='view']/tbody/tr[1]/td[2]");
@@ -18,13 +19,21 @@ public class ViewProductPage {
     private By saleProductsLocator = By.xpath("//*[@id='view']/tbody/tr[1]/td[5]");
     private By munafacturesProductsLocator = By.xpath("//*[@id='view']/tbody/tr[1]/td[6]");
 
-
+    private By titleViewProductPageLocator = By.xpath("//h3[@class='box-title']");
 
 
     public ViewProductPage(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
         this.wait = wait;
     }
+
+    @Step("Get Title of View Product Page")
+    public String getTitleViewProductPage() {
+        WebElement titleViewProductPageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(titleViewProductPageLocator));
+        String titleViewProductPage = titleViewProductPageElement.getText().trim();
+        return titleViewProductPage;
+    }
+
     @Step("Get Name of the first product")
     public String getNameProduct() {
         WebElement nameProductElement = wait.until(ExpectedConditions.visibilityOfElementLocated(nameProductsLocator));

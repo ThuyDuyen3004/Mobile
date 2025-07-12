@@ -7,6 +7,7 @@ import Pages.admin.Product;
 import Pages.admin.ViewProductPage;
 import Pages.user.HomePage;
 import Pages.user.LoginPage;
+import com.github.javafaker.Faker;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -20,6 +21,7 @@ import java.time.Duration;
 import java.util.Random;
 
 public class TC_08 {
+
     @Test (description = "TC_08 - Add Product Successfully")
     public void testAddProductSuccessfully() throws InterruptedException {
         // Step 1
@@ -27,7 +29,7 @@ public class TC_08 {
         homePage.OpenLoginForm();
         // Step 2
         loginPage.login(Constants.USERNAME_ADMIN, Constants.PASSWORD_ADMIN);
-        Thread.sleep(3000);
+
         // Step 3
         driver.get(Constants.URL_ADMIN);
         categories.goToCategoryByName("Products");
@@ -36,12 +38,17 @@ public class TC_08 {
         // Step 4
         viewProductPage.clickAddProductButton();
         // Step 5 ~ Step 11
-        String imagePath = System.getProperty("user.dir") + "/src/main/java/resources/Screenshot_2025-04-21_212042.png";
-        String nameProduct = new Random().nextInt(1000) + "Test Product";
+        String imagePath = Constants.IMAGE_PATH_PNG;
+        String nameProduct = faker.lorem().characters(7);
+        String price = faker.number().digits(5).toString();
+        String quality = faker.number().digits(3).toString();
+        String sale = faker.number().digits(2).toString();
+        String manufacture = "Apple";
+        String specification = faker.gameOfThrones().character();
 
         product = new Product(nameProduct,
-                "100", "10", "5", "Apple",
-                "This is a test product description", imagePath);
+                price, quality, sale, manufacture,
+                specification, imagePath);
 
         addProductsPage.addProduct(product);
 
@@ -80,6 +87,7 @@ public class TC_08 {
         viewProductPage = new ViewProductPage(driver, wait);
         loginPage = new LoginPage(driver);
         homePage = new HomePage(driver);
+        faker = new Faker();
 
 
     }
@@ -98,5 +106,5 @@ public class TC_08 {
     LoginPage loginPage;
     Product product;
 
-
+    Faker faker;
 }
