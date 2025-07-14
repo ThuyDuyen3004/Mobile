@@ -105,6 +105,5 @@ public class TC_08 {
     HomePage homePage;
     LoginPage loginPage;
     Product product;
-
     Faker faker;
 }

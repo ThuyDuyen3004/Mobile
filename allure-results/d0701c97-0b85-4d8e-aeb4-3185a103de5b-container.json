@@ -1,1 +1,0 @@
-{"uuid":"d0701c97-0b85-4d8e-aeb4-3185a103de5b","name":"Test.TC04.setup","children":["557bd1e7-b771-48ac-99d4-e41a65ac2852"],"description":"","befores":[{"name":"setup","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1752219196157,"stop":1752219198575}],"afters":[],"start":1752219196156,"stop":1752219198576}

@@ -1,1 +1,0 @@
-{"uuid":"0a3d5cb4-1b15-4e2a-ac2a-a6d4dac60d06","name":"Test.TC02.setup","children":["f9e1f4b5-5599-4b75-a16d-9f291d907b18"],"description":"","befores":[{"name":"setup","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1752237837550,"stop":1752237839623}],"afters":[],"start":1752237837549,"stop":1752237839624}
