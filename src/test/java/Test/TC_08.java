@@ -58,17 +58,19 @@ public class TC_08 {
         );
 
 
-        categories.goToCategoryByName("Products");
+        categories.openProductPage();
+
         String nameProductAfterAdd = viewProductPage.getNameProduct();
         String priceProductAfterAdd = viewProductPage.getPriceProduct();
         String qualityProductAfterAdd = viewProductPage.getQualityProduct();
         String saleProductAfterAdd = viewProductPage.getSaleProduct();
         String manufactureProductAfterAdd = viewProductPage.getMunafacturesProduct();
-
-        softAssert.assertTrue(product.getName().equals(nameProductAfterAdd) &&
-                        product.getPrice().equals(priceProductAfterAdd) && product.getQuality().equals(qualityProductAfterAdd)  &&
-                        product.getSales().equals(saleProductAfterAdd)  && product.getManufacture().equals(manufactureProductAfterAdd),
-                "Sản phẩm mới được thêm vào list Prodcut không thành công");
+        productAfterAdd = new Product(nameProductAfterAdd, priceProductAfterAdd, qualityProductAfterAdd, saleProductAfterAdd, manufactureProductAfterAdd, "", "");
+        softAssert.assertEquals(productAfterAdd, product,"Sản phẩm mới được thêm vào list Product không thành công");
+//        softAssert.assertTrue(nameProduct.equals(nameProductAfterAdd) &&
+//                        price.equals(priceProductAfterAdd) && quality.equals(qualityProductAfterAdd)  &&
+//                        sale.equals(saleProductAfterAdd)  && manufacture.equals(manufactureProductAfterAdd),
+//                "Sản phẩm mới được thêm vào list Product không thành công");
 
         softAssert.assertAll();
     }
@@ -106,4 +108,5 @@ public class TC_08 {
     LoginPage loginPage;
     Product product;
     Faker faker;
+    Product productAfterAdd;
 }

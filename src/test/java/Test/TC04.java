@@ -45,73 +45,66 @@ public class TC04 extends BaseTest {
         // Step 6
         orderPage.EnterAddress(validAddress);
         orderPage.EnterPassword(validPassword);
-        String msg1 = orderPage.getWarningMessage();
-        softAssert.assertEquals(msg1, "Họ và tên không được để trống", "Sai message ở step 5");
+
+        softAssert.assertEquals(orderPage.getWarningMessage(), "Họ và tên không được để trống", "Sai message ở step 5");
 
         // Step 7 - Tên hợp lệ
         orderPage.EnterFullname(validName);
 
         // Step 8 - Địa chỉ rỗng
         orderPage.EnterAddress("");
-        String msg2 = orderPage.getWarningMessage();
-        softAssert.assertEquals(msg2, "Địa chỉ không được để trống", "Sai message ở step 8");
+
+        softAssert.assertEquals(orderPage.getWarningMessage(), "Địa chỉ không được để trống", "Sai message ở step 8");
 
         // Step 9 - Địa chỉ hợp lệ
         orderPage.EnterAddress(validAddress);
 
         // Step 10 - Mật khẩu rỗng
         orderPage.EnterPassword("");
-        String msg3 = orderPage.getWarningMessage();
-        softAssert.assertEquals(msg3, "Mật khẩu không được để trống", "Sai message ở step 10");
+
+        softAssert.assertEquals(orderPage.getWarningMessage(), "Mật khẩu không được để trống", "Sai message ở step 10");
 
         // Step 11 - Mật khẩu hợp lệ
         orderPage.EnterPassword(validPassword);
 
         // Step 12 - Tên toàn số
         orderPage.EnterFullname(faker.number().digits(10));
-        String msg4 = orderPage.getWarningMessage();
-        softAssert.assertEquals(msg4, "Chỉ nhập ký tự chữ", "Sai message ở step 12");
+
+        softAssert.assertEquals(orderPage.getWarningMessage(), "Chỉ nhập ký tự chữ", "Sai message ở step 12");
 
         // Step 13 - Tên có ký tự đặc biệt
         orderPage.EnterFullname("@$#*&^" + faker.lorem().characters(5));
-        String msg5 = orderPage.getWarningMessage();
-        softAssert.assertEquals(msg5, "Chỉ nhập ký tự chữ", "Sai message ở step 13");
+        softAssert.assertEquals(orderPage.getWarningMessage(), "Chỉ nhập ký tự chữ", "Sai message ở step 13");
 
         // Step 14 - Tên có 6 ký tự
         orderPage.EnterFullname(faker.lorem().characters(6));
-        String msg6 = orderPage.getWarningMessage();
-        softAssert.assertEquals(msg6, "Họ và tên phải trên 6 ký tự", "Sai message ở step 14");
+        softAssert.assertEquals(orderPage.getWarningMessage(), "Họ và tên phải trên 6 ký tự", "Sai message ở step 14");
 
         // Step 15 - Tên hợp lệ
         orderPage.EnterFullname(validName);
 
         // Step 16 - Địa chỉ toàn số
         orderPage.EnterAddress(faker.number().digits(20));
-        String msg7 = orderPage.getWarningMessage();
-        softAssert.assertEquals(msg7, "Địa chỉ chứa chữ cái và số", "Sai message ở step 16");
+        softAssert.assertEquals(orderPage.getWarningMessage(), "Địa chỉ chứa chữ cái và số", "Sai message ở step 16");
 
         // Step 17 - Địa chỉ có ký tự đặc biệt
         orderPage.EnterAddress("@$#*&^" + faker.lorem().characters(5));
-        String msg8 = orderPage.getWarningMessage();
-        softAssert.assertEquals(msg8, "Địa chỉ chứa chữ cái và số", "Sai message ở step 17");
+        softAssert.assertEquals(orderPage.getWarningMessage(), "Địa chỉ chứa chữ cái và số", "Sai message ở step 17");
 
         // Step 18 - Địa chỉ chỉ 14 ký tự
         orderPage.EnterAddress(faker.lorem().characters(14));
-        String msg9 = orderPage.getWarningMessage();
-        softAssert.assertEquals(msg9, "Địa chỉ phải trên 15 ký tự", "Sai message ở step 18");
+        softAssert.assertEquals(orderPage.getWarningMessage(), "Địa chỉ phải trên 15 ký tự", "Sai message ở step 18");
 
         // Step 19 - Địa chỉ 15 ký tự
         orderPage.EnterAddress(faker.lorem().characters(15));
-        String msg10 = orderPage.getWarningMessage();
-        softAssert.assertEquals(msg10, "Địa chỉ phải trên 15 ký tự", "Sai message ở step 19");
+        softAssert.assertEquals(orderPage.getWarningMessage(), "Địa chỉ phải trên 15 ký tự", "Sai message ở step 19");
 
         // Step 20 - Địa chỉ hợp lệ
         orderPage.EnterAddress(validAddress);
 
         // Step 21 - Mật khẩu sai
         orderPage.EnterPassword(faker.number().digits(5));
-        String msg11 = orderPage.getWarningMessage();
-        softAssert.assertEquals(msg11, "Mật khẩu không đúng", "Sai message ở step 21");
+        softAssert.assertEquals(orderPage.getWarningMessage(), "Mật khẩu không đúng", "Sai message ở step 21");
 
         softAssert.assertAll();
     }

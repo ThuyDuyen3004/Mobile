@@ -42,7 +42,7 @@ public class AddProductsPage {
         return alertMessage.getText().trim().split("\n")[0];
     }
 
-    @Step("Get content error by label text")
+    @Step("Get content error by label text {labelText}")
     public String getTextByLabel(String labelText) {
         String xpath = String.format("//label[contains(text(), '%s')]/span[@class='text-danger'][2]", labelText);
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));

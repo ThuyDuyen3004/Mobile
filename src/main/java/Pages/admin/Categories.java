@@ -4,6 +4,7 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
@@ -23,8 +24,14 @@ public class Categories {
         for (WebElement category : categories) {
             if (category.getText().trim().contentEquals(categoryName.trim())) {
                 category.click();
-                return;
+
+                break;
             }
         }
+    }
+
+    public void openProductPage() {
+        goToCategoryByName("Products");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h3[@class='box-title']")));
     }
 }

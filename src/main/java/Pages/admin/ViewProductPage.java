@@ -27,6 +27,7 @@ public class ViewProductPage {
         this.wait = wait;
     }
 
+
     @Step("Get Title of View Product Page")
     public String getTitleViewProductPage() {
         WebElement titleViewProductPageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(titleViewProductPageLocator));
@@ -43,7 +44,10 @@ public class ViewProductPage {
     @Step("Get Price of the first product")
     public String getPriceProduct() {
         WebElement priceProductElement = wait.until(ExpectedConditions.visibilityOfElementLocated(priceProductsLocator));
-        String priceProduct = priceProductElement.getText().trim().replace("đ", "");
+
+        String priceProduct = priceProductElement.getText().trim().
+                replace("đ", "").replace(",","" );
+
         return priceProduct;
     }
 

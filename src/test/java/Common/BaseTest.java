@@ -1,6 +1,11 @@
 package Common;
 
+import Pages.admin.AddProductsPage;
+import Pages.admin.Categories;
+import Pages.admin.Product;
+import Pages.admin.ViewProductPage;
 import Pages.user.*;
+import com.github.javafaker.Faker;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -23,6 +28,14 @@ public class BaseTest {
     protected PaymentPage paymentPage;
     protected SearchPage searchPage;
 
+    Categories categories;
+    AddProductsPage addProductsPage;
+    ViewProductPage viewProductPage;
+
+    Product product;
+    Faker faker;
+    Product productAfterAdd;
+
     @BeforeMethod
     public void setup() {
         driver = new ChromeDriver();
@@ -36,6 +49,14 @@ public class BaseTest {
         orderPage = new OrderPage(driver);
         paymentPage = new PaymentPage(driver);
         searchPage = new SearchPage(driver);
+        categories = new Categories(driver, wait);
+        addProductsPage = new AddProductsPage(driver, wait);
+        viewProductPage = new ViewProductPage(driver, wait);
+        loginPage = new LoginPage(driver);
+        homePage = new HomePage(driver);
+        faker = new Faker();
+        addProductsPage = new AddProductsPage(driver, wait);
+        viewProductPage = new ViewProductPage(driver, wait);
     }
 
     @AfterMethod

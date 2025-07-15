@@ -89,8 +89,6 @@ public class AddProductNegativeTests {
         softAssert.assertEquals(addProductsPage.getAlertMessageError(), "ko thành cong",
                 "Missing required fields should show error with Invalid Price");
 
-
-
         // TC 11 - Add Product with Negative Quantity
         product = new Product(nameProduct,
                 price, qualityNegative, sale, manufacture,
@@ -149,8 +147,6 @@ public class AddProductNegativeTests {
         loginPage = new LoginPage(driver);
         homePage = new HomePage(driver);
         faker = new Faker();
-
-
 
 
     }

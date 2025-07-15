@@ -24,6 +24,7 @@ public class TC05 extends BaseTest {
       //  System.out.println("Order Items: " + list2);
 
         softAssert.assertEquals(list1, list2, "Product details do not match between Cart and Order page");
+        softAssert.assertAll();
 
     }
 }

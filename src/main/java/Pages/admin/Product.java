@@ -19,6 +19,16 @@ public class Product {
         this.imagePath = imagePath;
     }
 
+    public Product(String nameProductAfterAdd, String priceProductAfterAdd, String qualityProductAfterAdd, String saleProductAfterAdd, String manufactureProductAfterAdd) {
+        this.name = nameProductAfterAdd;
+        this.price = priceProductAfterAdd;
+        this.quality = qualityProductAfterAdd;
+        this.sales = saleProductAfterAdd;
+        this.manufacture = manufactureProductAfterAdd;
+        this.specification = specification;
+        this.imagePath = imagePath;
+    }
+
     // Getters
     public String getName() { return name; }
     public String getPrice() { return price; }

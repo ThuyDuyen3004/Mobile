@@ -29,7 +29,6 @@ public class TC02 extends BaseTest {
         searchPage.selectProductByIndex(2);
         String currentUrl = driver.getCurrentUrl();
         softAssert.assertTrue(currentUrl.contains("product_details"), "Detail page URL is invalid" + currentUrl);
-        Thread.sleep(100);
         softAssert.assertAll();
     }
 }

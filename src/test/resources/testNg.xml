@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="ParallelSuite" parallel="classes" thread-count="1">
-    <test name="RunAllTests">
+<suite name="ParallelSuite" parallel="tests" thread-count="2">
+    <test name="Run-Tests-">
         <classes>
             <class name="Test.TC01"/>
             <class name="Test.TC02"/>
@@ -9,6 +9,10 @@
             <class name="Test.TC05"/>
             <class name="Test.TC06"/>
             <class name="Test.TC07"/>
+        </classes>
+    </test>
+    <test name="Run-Tests-Add-Product-Admin">
+        <classes>
             <class name="Test.TC_08"/>
             <class name="Test.AddProductNegativeTests"/>
             <class name="Test.TC14"/>
