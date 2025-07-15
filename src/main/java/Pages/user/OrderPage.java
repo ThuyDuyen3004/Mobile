@@ -97,7 +97,7 @@ public class OrderPage {
 
             cartItemList.add(new CartItem(name, price, promotion));
 
-            System.out.println("Cart Item " + i + ": " + name + ", Price: " + price + ", Promotion: " + promotion);
+          //  System.out.println("Cart Item " + i + ": " + name + ", Price: " + price + ", Promotion: " + promotion);
         }
 
         return cartItemList;
