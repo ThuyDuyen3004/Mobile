@@ -125,7 +125,6 @@ public class HomePage extends BasePage {
         for (int i = 0; i < 3; i++) {
             WebElement button = allButtons.get(i);
 
-            // Dùng Javascript click nếu cần an toàn hơn
             wait.until(ExpectedConditions.elementToBeClickable(button));
             button.click();
 
