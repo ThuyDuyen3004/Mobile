@@ -1,6 +1,7 @@
 
 package Test;
 
+import Common.BaseTest;
 import Pages.user.*;
 import com.github.javafaker.Faker;
 import jdk.jfr.Description;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-public class TC04 {
+public class TC04 extends BaseTest {
 
     @Test
     @Description("Verify that the order form displays the correct validation messages when entering invalid data or leaving fields empty")
@@ -29,17 +30,18 @@ public class TC04 {
         homePage.OpenLoginForm();
         loginPage.login(Constants.EMAIL, Constants.PASSWORD);
 
-        List<WebElement> allButtons = homePage.getAllAddToCartButtons();
-        WebElement randomButton = allButtons.get(new Random().nextInt(allButtons.size()));
-        wait.until(ExpectedConditions.elementToBeClickable(randomButton)).click();
-        cartPage.clickOrderButton();
+        // random
+        homePage.clickButtonAddToCartRandom();
+
+        cartPage.ClickOrderButton();
         Faker faker = new Faker(new Locale("vi"));
         String validName = faker.name().fullName();
         String validAddress = faker.address().fullAddress();
-        String validPassword = "3042004a3A@";
+        String validPassword = Constants.PASSWORD;
 
         // Step 5 - Leave the [Họ và tên] field empty
         orderPage.EnterFullname("");
+
         // Step 6
         orderPage.EnterAddress(validAddress);
         orderPage.EnterPassword(validPassword);
@@ -113,35 +115,5 @@ public class TC04 {
 
         softAssert.assertAll();
     }
-    WebDriver driver;
-    WebDriverWait wait;
-    SoftAssert softAssert;
-    LoginPage loginPage;
-    HomePage homePage;
-    CartPage cartPage;
-    OrderPage orderPage;
-    PaymentPage paymentPage;
-    SearchPage searchPage;
-    Faker faker;
 
-    @BeforeMethod
-    public void setup() {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        softAssert = new SoftAssert();
-        faker = new Faker();
-
-        loginPage = new LoginPage(driver);
-        homePage = new HomePage(driver);
-        cartPage = new CartPage(driver);
-        orderPage = new OrderPage(driver);
-        paymentPage = new PaymentPage(driver);
-        searchPage = new SearchPage(driver);
-    }
-
-    @AfterMethod
-    public void tearDown() {
-        driver.quit();
-    }
 }

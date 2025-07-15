@@ -1,124 +1,18 @@
-//package Pages.user;
-//
-//import org.openqa.selenium.By;
-//import org.openqa.selenium.WebDriver;
-//import org.openqa.selenium.WebElement;
-//import org.openqa.selenium.support.ui.ExpectedConditions;
-//import org.openqa.selenium.support.ui.Select;
-//import org.openqa.selenium.support.ui.WebDriverWait;
-//
-//import java.time.Duration;
-//
-//public class CartPage {
-//    private WebDriver driver;
-//    protected WebDriverWait wait;
-//    public CartPage(WebDriver driver) {
-//        this.driver = driver;
-//        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//    }
-//    private By DatHangNgayButtonLocator = By.id("order_product");
-//    private By iconClose=By.xpath("//div[@id='cart_modal']//button[@type='button' and normalize-space()='×']");
-//    public void clickOrderButton() {
-//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//        wait.until(ExpectedConditions.elementToBeClickable(DatHangNgayButtonLocator));
-//        driver.findElement(DatHangNgayButtonLocator).click();
-//    }
-//    public void closeCartForm() {
-//        WebElement closeButton = wait.until(ExpectedConditions.elementToBeClickable(iconClose));
-//        closeButton.click();
-//    }
-//
-//    public By getDiscountByRow(int s) {
-//        return By.xpath("//table//tbody//tr[" + s + "]/td[3]");
-//    }
-//
-//    public By getUnitPriceByRow(int s) {
-//        return By.xpath("//table//tbody//tr[" + s + "]/td[5]");
-//    }
-//
-//    public By getSubtotalByRow(int s) {
-//        return By.xpath("//table//tbody//tr[" + s + "]/td[6]");
-//    }
-//
-//    public int getQuantityAsIntByRow(int s) {
-//        WebElement selectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-//                By.xpath("//table//tbody//tr[" + s + "]/td[4]//select")));
-//        Select select = new Select(selectElement);
-//        String selectedText = select.getFirstSelectedOption().getText().trim();
-//        return Integer.parseInt(selectedText);
-//    }
-//
-//    // Lấy đơn giá
-//    public double getUnitPriceByRowAsDouble(int s) {
-//        String text = driver.findElement(getUnitPriceByRow(s)).getText().trim();
-//        return parseCurrencyToDouble(text);
-//    }
-//
-//    // Lấy thành tiền
-//    public double getSubtotalByRowAsDouble(int s) {
-//        String text = driver.findElement(getSubtotalByRow(s)).getText().trim();
-//        return parseCurrencyToDouble(text);
-//    }
-//
-//    // Lấy giảm giá
-//    public double getDiscountAsDouble(int s) {
-//        String text = driver.findElement(getDiscountByRow(s)).getText().trim();
-//        if (text.isEmpty()) {
-//            return 0.0;
-//        }
-//        return parsePercentToDouble(text);
-//    }
-//
-//    // Tính expected subtotal
-//    public double calculateExpectedSubtotal(int s) {
-//        int quantity = getQuantityAsIntByRow(s);
-//        double unitPrice = getUnitPriceByRowAsDouble(s);
-//        double discount = getDiscountAsDouble(s);
-//
-//        return ((100 - discount) / 100.0) * quantity * unitPrice;
-//    }
-//
-//    // Kiểm tra expected subtotal với subtotal thực tế
-//    public boolean isSubtotalCorrect(int s) {
-//        int quantity = getQuantityAsIntByRow(s);
-//        double unitPrice = getUnitPriceByRowAsDouble(s);
-//        double discount = getDiscountAsDouble(s);
-//        double expected = ((100 - discount) / 100.0) * quantity * unitPrice;
-//        double actual = getSubtotalByRowAsDouble(s);
-//
-//        // In ra chi tiết
-////        System.out.println(" Dòng " + s + ": Số lượng = " + quantity + ", Đơn giá = " + unitPrice +
-////                ", Giảm giá = " + discount + "%");
-////        System.out.printf("Thành tiền mong đợi: ((100 - %.1f)/100) * %d * %.0f = %.2f\n",
-////                discount, quantity, unitPrice, expected);
-////        System.out.printf("Thành tiền thực tế: %.2f\n\n", actual);
-////
-//       return expected == actual;
-//    }
-//
-//    private double parseCurrencyToDouble(String text) {
-//        return Double.parseDouble(text.replace("đ", "").replace(".", "").replace(",", "").trim());
-//    }
-//
-//
-//    private double parsePercentToDouble(String text) {
-//        return Double.parseDouble(text.replace("%", "").trim());
-//    }
-//
-//
-//}
-//
-//
+
 package Pages.user;
 
+import Models.CartItem;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.WaitUtils;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartPage {
@@ -130,36 +24,34 @@ public class CartPage {
             "Hình ảnh", "Tên sản phẩm", "Giảm giá", "Số lượng", "Đơn giá", "Thành tiền"
     );
 
-    private final By DatHangNgayButtonLocator = By.id("order_product");
-    private final By iconClose = By.xpath("//div[@id='cart_modal']//button[@type='button' and normalize-space()='×']");
 
+    private final By iconClose = By.xpath("//div[@id='cart_modal']//button[@type='button' and normalize-space()='×']");
+    By OrderbuttonLocator=By.id("order_product");
+    By TotalPrice = By.xpath("(//label[contains(@class, 'toal_money')])/span");
     public CartPage(WebDriver webDriver) {
         this.webDriver = webDriver;
         this.wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
     }
 
-    public void clickOrderButton() {
-        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(DatHangNgayButtonLocator));
-        button.click();
-    }
-
+    @Step("Close the cart popup")
     public void closeCartForm() {
         WebElement closeButton = wait.until(ExpectedConditions.elementToBeClickable(iconClose));
         closeButton.click();
     }
 
+    @Step("Get product name at row {index}")
     public String getProductNameByIndex(int index) {
         WebElement row = getRowElementByIndex(index);
         return row.findElements(By.tagName("td"))
                 .get(COLUMN_NAMES.indexOf("Tên sản phẩm")).getText().trim();
     }
-
+    @Step("Get discount at row {index}")
     public String getDiscountByIndex(int index) {
         WebElement row = getRowElementByIndex(index);
         return row.findElements(By.tagName("td"))
                 .get(COLUMN_NAMES.indexOf("Giảm giá")).getText().trim();
     }
-
+    @Step("Get unit price at row {index}")
     public double getUnitPriceByIndex(int index) {
         WebElement row = getRowElementByIndex(index);
         String text = row.findElements(By.tagName("td"))
@@ -167,6 +59,7 @@ public class CartPage {
         return parseCurrencyToDouble(text);
     }
 
+    @Step("Get quantity at row {index}")
     public int getQuantityByIndex(int index) {
         WebElement row = getRowElementByIndex(index);
         WebElement td = row.findElements(By.tagName("td"))
@@ -178,6 +71,7 @@ public class CartPage {
         String quantity = selectedOption.getText().trim();
         return Integer.parseInt(quantity);
     }
+    @Step("Get subtotal at row {index}")
 
     public double getSubtotalByIndex(int index) {
         WebElement row = getRowElementByIndex(index);
@@ -185,14 +79,12 @@ public class CartPage {
                 .get(COLUMN_NAMES.indexOf("Thành tiền")).getText().trim();
         return parseCurrencyToDouble(text);
     }
-
-
+    @Step("Get discount as double at row {index}")
     public double getDiscountAsDoubleByIndex(int index) {
         String text = getDiscountByIndex(index).trim();
         return parsePercentToDouble(text);
     }
-
-
+    @Step("Verify subtotal at row {index}")
     public boolean isSubtotalCorrect(int index) {
         int quantity = getQuantityByIndex(index);
         double unitPrice = getUnitPriceByIndex(index);
@@ -207,16 +99,16 @@ public class CartPage {
 //                discount, quantity, unitPrice, expected);
 //        System.out.printf("Thành tiền thực tế: %.2f\n\n", actual);
 
-        return expected==actual;
+        return expected == actual;
     }
 
-//    private By getRowByIndex(int index) {
+    //    private By getRowByIndex(int index) {
 //        return By.xpath(String.format("//table/tbody/tr[%d]", index));
 //    }
-private WebElement getRowElementByIndex(int index) {
-    By rowLocator = By.xpath(String.format("//table/tbody/tr[%d]", index));
-    return wait.until(ExpectedConditions.visibilityOfElementLocated(rowLocator));
-}
+    private WebElement getRowElementByIndex(int index) {
+        By rowLocator = By.xpath(String.format("//table/tbody/tr[%d]", index));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(rowLocator));
+    }
 
 
     private double parseCurrencyToDouble(String text) {
@@ -231,25 +123,57 @@ private WebElement getRowElementByIndex(int index) {
         String cleaned = text.replace("%", "").trim();
         return Double.parseDouble(cleaned);
     }
+
     //
-    By TotalPrice =By.xpath("(//label[contains(@class, 'toal_money')])/span");
+
+    @Step("Get total price displayed on the page")
     public double getTotalPrice() {
         WebElement totalElement = wait.until(ExpectedConditions.visibilityOfElementLocated(TotalPrice));
         String totalText = totalElement.getText().replace("đ", "").replace(".", "").replace(",", "").trim();
         return Double.parseDouble(totalText);
     }
+    @Step("Calculate total of all subtotals")
     public double calculateTotalSubtotal() {
         List<WebElement> rows = webDriver.findElements(By.xpath("//table/tbody/tr"));
         double total = 0.0;
-        for (int i = 1; i <= rows.size()-1; i++) {
+        for (int i = 1; i <= rows.size() - 1; i++) {
             total += getSubtotalByIndex(i);
         }
         return total;
     }
+    @Step("Verify total price matches the sum of all subtotals")
     public boolean isTotalPriceCorrect() {
         double expectedTotal = calculateTotalSubtotal();
         double actualTotal = getTotalPrice();
-        return expectedTotal==actualTotal;
+        return expectedTotal == actualTotal;
+    }
+
+    @Step("Click vào nút Đặt hàng")
+    public void ClickOrderButton() {
+        WebElement orderButton = wait.until(ExpectedConditions.elementToBeClickable(OrderbuttonLocator));
+        orderButton.click();
+    }
+    //
+    @Step("Get product name, price, and discount from Cartpage")
+    public ArrayList<CartItem> getAllCartItems() {
+        WaitUtils.sleep(2);
+
+        ArrayList<CartItem> cartItemList = new ArrayList<>();
+
+        List<WebElement> cartItems = webDriver.findElements(By.xpath("//tbody/tr"));
+
+        for (int i = 1; i < cartItems.size(); i++) {
+            String name = webDriver.findElement(By.xpath("//tbody/tr[" + i + "]/td[2]")).getText();
+            String priceText = webDriver.findElement(By.xpath("//tbody/tr[" + i + "]/td[5]")).getText().replaceAll("[^\\d.]", "");
+            double price = Double.parseDouble(priceText);
+            String promotion = webDriver.findElement(By.xpath("//tbody/tr[" + i + "]/td[3]")).getText();
+
+            cartItemList.add(new CartItem(name, price, promotion));
+
+            System.out.println("Cart Item " + i + ": " + name + ", Price: " + price + ", Promotion: " + promotion);
+        }
+
+        return cartItemList;
     }
 
 }

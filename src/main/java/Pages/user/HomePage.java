@@ -1,5 +1,6 @@
 package Pages.user;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,22 +10,27 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class HomePage extends BasePage {
 
     public HomePage(WebDriver driver) {
         super(driver);
     }
-    private By DangNhapButton = By.xpath("//div[@class='top-header']//a[@data-target='#login']");
-    private By PhoneLocator=By.xpath("//nav[@class='navbar navbar-bg']//span[contains(@class, 'fa-mobile')]");
-    private By Dropdown=By.xpath("//div[@class='btn-group pull-right']//button[@type='button']");
-    private By ItemPrice = By.xpath("((//div[@class='col-md-8'])/following-sibling::div)/descendant::p[@class='text-danger']");
 
+    private By DangNhapButton = By.xpath("//div[@class='top-header']//a[@data-target='#login']");
+    private By PhoneLocator = By.xpath("//nav[@class='navbar navbar-bg']//span[contains(@class, 'fa-mobile')]");
+    private By Dropdown = By.xpath("//div[@class='btn-group pull-right']//button[@type='button']");
+    private By ItemPrice = By.xpath("((//div[@class='col-md-8'])/following-sibling::div)/descendant::p[@class='text-danger']");
+    private By lowtohighPriceLocator = By.xpath("//ul[@class='dropdown-menu']//a[contains(text(),'Giá từ thấp đến cao')]");
+    private By HighToPricePriceLocator = By.xpath("//ul[@class='dropdown-menu']//a[contains(text(),'Giá từ cao đến thấp')]");
+    @Step("Open the login form")
     public void OpenLoginForm() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement loginBtn = wait.until(ExpectedConditions.elementToBeClickable(DangNhapButton));
         loginBtn.click();
     }
+    @Step("Get all enabled 'Add to Cart' buttons")
     public List<WebElement> getAllAddToCartButtons() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@class,'cart_class')]")));
@@ -39,90 +45,94 @@ public class HomePage extends BasePage {
         }
         return enabledButtons;
     }
-    //
 
-//    public double GetPrice() {
-//        String text = driver.findElement(ItemPrice).getText();
-//        text = text.replace("Giá: ", "").replace("đ", "").replace(".", "").replace(",", "").trim();
-//        return Double.parseDouble(text);
-//    }
-
+    @Step("Click a random 'Add to Cart' button")
+    public void clickButtonAddToCartRandom() {
+        List<WebElement> allButtons = getAllAddToCartButtons();
+        System.out.println(allButtons.size());
+        WebElement randomButton = allButtons.get(new Random().nextInt(allButtons.size()));
+        wait.until(ExpectedConditions.elementToBeClickable(randomButton)).click();
+    }
+    @Step("Click on 'Phone' category")
     public void clickPhoneCategory() {
         WebElement button = wait.until(ExpectedConditions.elementToBeClickable(PhoneLocator));
         button.click();
     }
-
-    public void clickXemthem()
-    {
+    @Step("Click on the 'See More' dropdown")
+    public void clickXemthem() {
         driver.findElement(Dropdown).click();
     }
-    private By lowtohighPriceLocator= By.xpath("//ul[@class='dropdown-menu']//a[contains(text(),'Giá từ thấp đến cao')]");
-    private By HighToPricePriceLocator= By.xpath("//ul[@class='dropdown-menu']//a[contains(text(),'Giá từ cao đến thấp')]");
+
+    @Step("Select 'Price Low to High' sorting option")
     public void selectGiaThapDenCao() {
         WebElement giaThapDenCao = wait.until(ExpectedConditions.elementToBeClickable(lowtohighPriceLocator));
         giaThapDenCao.click();
     }
+    @Step("Verify that items are sorted by price: low to high")
 
     public boolean isSortedByGiaThapDenCao() {
         List<WebElement> priceElements = driver.findElements(ItemPrice);
         List<Double> actualPrices = new ArrayList<>();
 
-        for (WebElement element : priceElements) {
-            String text = element.getText()
+        for (int i = 0; i < priceElements.size(); i++) {
+            String text = priceElements.get(i).getText()
                     .replace("Giá: ", "")
                     .replace("đ", "")
                     .replace(".", "")
                     .replace(",", "")
                     .trim();
-            actualPrices.add(Double.parseDouble(text));
-        }
-
-        for (int i = 0; i < actualPrices.size() - 1; i++) {
-            if (actualPrices.get(i) > actualPrices.get(i + 1)) {
+            double price = Double.parseDouble(text);
+            actualPrices.add(price);
+            if (i > 0 && actualPrices.get(i - 1) > price) {
                 return false;
             }
         }
         return true;
     }
+
+    @Step("Select 'Price High to Low' sorting option")
     public void selectGiaCaoDenThap() {
 
         WebElement giaThapDenCao = wait.until(ExpectedConditions.elementToBeClickable(HighToPricePriceLocator));
         giaThapDenCao.click();
     }
-
+    @Step("Verify that items are sorted by price: high to low")
     public boolean isSortedByGiaCaoDenThap() {
         List<WebElement> priceElements = driver.findElements(ItemPrice);
         List<Double> actualPrices = new ArrayList<>();
-
-        for (WebElement element : priceElements) {
-            String text = element.getText()
+        for (int i = 0; i < priceElements.size(); i++) {
+            String text = priceElements.get(i).getText()
                     .replace("Giá: ", "")
                     .replace("đ", "")
                     .replace(".", "")
                     .replace(",", "")
                     .trim();
-            actualPrices.add(Double.parseDouble(text));
-        }
+            double price = Double.parseDouble(text);
+            actualPrices.add(price);
 
-        for (int i = 0; i < actualPrices.size() - 1; i++) {
-            if (actualPrices.get(i) < actualPrices.get(i + 1)) {
+            if (i > 0 && actualPrices.get(i - 1) < price) {
                 return false;
             }
         }
-
         return true;
     }
 
-//
+    //
+    @Step("Add 3 random products to cart")
     public void add3RandomProductsToCart() throws InterruptedException {
         List<WebElement> allButtons = getAllAddToCartButtons();
 
         for (int i = 0; i < 3; i++) {
             WebElement button = allButtons.get(i);
-            wait.until(ExpectedConditions.elementToBeClickable(button)).click();
+
+            // Dùng Javascript click nếu cần an toàn hơn
+            wait.until(ExpectedConditions.elementToBeClickable(button));
+            button.click();
+
             CartPage cartPage = new CartPage(driver);
             cartPage.closeCartForm();
         }
     }
+
 
 }

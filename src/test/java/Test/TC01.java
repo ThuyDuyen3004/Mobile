@@ -1,5 +1,6 @@
 package Test;
 
+import Common.BaseTest;
 import Pages.user.*;
 import jdk.jfr.Description;
 import org.openqa.selenium.WebDriver;
@@ -18,24 +19,24 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Random;
 
-public class TC01 {
+public class TC01 extends BaseTest {
 
     @Test
     @Description("Verify that the user can purchase a product successfully when all information fields are valid")
-    public void VerifySuccessfulPurchase() throws InterruptedException{
+    public void VerifySuccessfulPurchase() throws InterruptedException {
         driver.get(Constants.URL);
 
         homePage.OpenLoginForm();
         loginPage.login(Constants.EMAIL, Constants.PASSWORD);
 
         // random
-        List<WebElement> allButtons = homePage.getAllAddToCartButtons();
-        WebElement randomButton = allButtons.get(new Random().nextInt(allButtons.size()));
-        wait.until(ExpectedConditions.elementToBeClickable(randomButton)).click();
-        cartPage.clickOrderButton();
+        homePage.clickButtonAddToCartRandom();
+        cartPage.ClickOrderButton();
 
         // Đổi sang OrderPage để nhập password
-        orderPage.EnterPassword("3042004a3A@");
+        orderPage.EnterPassword(Constants.PASSWORD);
+        orderPage.clickPayMentButton();
+
 
         // Lấy tên user từ fullname
         String username = orderPage.getFullName();
@@ -53,34 +54,5 @@ public class TC01 {
         Assert.assertEquals(contactText, expectedContact);
 
         softAssert.assertAll();
-    }
-
-    WebDriver driver;
-    WebDriverWait wait;
-    SoftAssert softAssert;
-    LoginPage loginPage;
-    HomePage homePage;
-    CartPage cartPage;
-    OrderPage orderPage;
-    PaymentPage paymentPage;
-
-    @BeforeMethod
-    public void setup() {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        softAssert = new SoftAssert();
-
-        loginPage = new LoginPage(driver);
-        homePage = new HomePage(driver);
-        cartPage = new CartPage(driver);
-        orderPage = new OrderPage(driver);
-        paymentPage = new PaymentPage(driver);
-    }
-
-
-    @AfterMethod
-    public void tearDown() {
-        driver.quit();
     }
 }

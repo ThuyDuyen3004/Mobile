@@ -103,17 +103,22 @@
 
 package Pages.user;
 
+import Models.CartItem;
+import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.WaitUtils;
+
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrderPage {
     private WebDriver driver;
     private WebDriverWait wait;
 
     By passwordLocator = By.id("password_od");
-    By paymentButtonLocator = By.id("order_success");
     By fullNameLocator = By.id("name_od");
     By addressLocator = By.id("address_od");
 
@@ -122,46 +127,42 @@ public class OrderPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
+    private final By PaymentButtonLocator= By.id("order_success");
+
+
+    @Step("Enter full name: {fullName}")
     public void EnterFullname(String d) {
         WebElement fullNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(fullNameLocator));
         fullNameField.clear();
         fullNameField.sendKeys(d, Keys.TAB);
     }
-
+    @Step("Enter address: {address}")
     public void EnterAddress(String s) {
         WebElement addressField = wait.until(ExpectedConditions.visibilityOfElementLocated(addressLocator));
         addressField.clear();
         addressField.sendKeys(s, Keys.TAB);
     }
-
+    @Step("Enter password")
     public void EnterPassword(String p) {
         WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(passwordLocator));
         passwordField.clear();
         passwordField.sendKeys(p, Keys.TAB);
     }
 
-    public void ClickPaymentButton() {
-        driver.findElement(paymentButtonLocator).click();
-    }
-
-    public void EnterOrderInformation(String name, String address, String password) {
-        EnterFullname(name);
-        EnterAddress(address);
-        EnterPassword(password);
-    }
-
+    @Step("Get full name from form")
     public String getFullName() {
         return driver.findElement(fullNameLocator).getAttribute("value");
     }
 
-
+    @Step("Get warning message after form submission")
     public String getWarningMessage() {
         By locator = By.xpath("//i[@class='text-danger']");
 
         try {
             new WebDriverWait(driver, Duration.ofSeconds(3))
                     .until(ExpectedConditions.invisibilityOfElementLocated(locator));
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             WebElement messageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
@@ -170,54 +171,39 @@ public class OrderPage {
             return "MESSAGE NOT FOUND";
         }
     }
+    @Step("Click on 'Payment' button")
+    public void clickPayMentButton() {
+        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(PaymentButtonLocator));
+        button.click();
+    }
+
+    //
+//    private final String nameXpath = "(//div[@id='list_order']//div[contains(@class,'information-list')]/descendant::label)[%d]";
+//    private final String priceXpath = "(//div[@id='list_order']//div[contains(@class,'information-list')]/descendant::span[1])[%d]";
+//    private final String discountXpath = "(//div[@id='list_order']//div[contains(@class,'information-list')]/descendant::span[2])[%d]";
 //
-    private final String nameXpath = "(//div[@id='list_order']//div[contains(@class,'information-list')]/descendant::label)[%d]";
-    private final String priceXpath = "(//div[@id='list_order']//div[contains(@class,'information-list')]/descendant::span[1])[%d]";
-    private final String discountXpath = "(//div[@id='list_order']//div[contains(@class,'information-list')]/descendant::span[2])[%d]";
 
-    public String getProductNameAfterByIndex(int index) {
-        By locator = By.xpath(String.format(nameXpath, index));
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-        return element.getText().trim();
+    @Step("Get product information (name, price, discount) of all products in order page")
+
+    public ArrayList<CartItem> getAllOrderItems() {
+        WaitUtils.sleep(2);
+
+        ArrayList<CartItem> cartItemList = new ArrayList<>();
+
+        List<WebElement> cartItems = driver.findElements(By.xpath("//div[@id='list_order']/div[contains(@class,'row information-list')]"));
+
+        for (int i = 1; i <= cartItems.size(); i++) {
+            String name = driver.findElement(By.xpath("(//div[@id='list_order']/div[contains(@class,'row information-list')])[" + i + "]//label")).getText();
+            String priceText = driver.findElement(By.xpath("(//div[@id='list_order']/div[contains(@class,'row information-list')])[" + i + "]//span[1]")).getText().replaceAll("[^\\d.]", "");
+            double price = Double.parseDouble(priceText);
+            String promotion = driver.findElement(By.xpath("(//div[@id='list_order']/div[contains(@class,'row information-list')])[" + i + "]//span[2]")).getText();
+
+            cartItemList.add(new CartItem(name, price, promotion));
+
+            System.out.println("Cart Item " + i + ": " + name + ", Price: " + price + ", Promotion: " + promotion);
+        }
+
+        return cartItemList;
     }
 
-    public double getProductPriceAfterByIndex(int index) {
-        By locator = By.xpath(String.format(priceXpath, index));
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-        String raw = element.getText().replace("đ", "").replace(".", "").replace(",", "").trim();
-        return Double.parseDouble(raw);
-    }
-
-    public double getProductDiscountAfterByIndex(int index) {
-        By locator = By.xpath(String.format(discountXpath, index));
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-        String raw = element.getText().replace("%", "").trim();
-        return Double.parseDouble(raw);
-    }
-    //
-    public boolean isProductInfoMatchingWithCart(int index, CartPage cartPage) {
-        // Dữ liệu từ cart
-        String nameCart = cartPage.getProductNameByIndex(index);
-        double priceCart = cartPage.getUnitPriceByIndex(index);
-        double discountCart = cartPage.getDiscountAsDoubleByIndex(index);
-
-        // Dữ liệu từ order page
-        String nameOrder = getProductNameAfterByIndex(index);
-        double priceOrder = getProductPriceAfterByIndex(index);
-        double discountOrder = getProductDiscountAfterByIndex(index);
-
-//        System.out.printf("Product %d:\n", index);
-//        System.out.printf( nameCart, priceCart, discountCart);
-//        System.out.printf(nameOrder, priceOrder, discountOrder);
-
-        return nameCart.equalsIgnoreCase(nameOrder) &&
-                (priceCart==priceOrder) && (discountCart==discountOrder);
-    }
-    //
-    By comebackLocator = By.xpath("//button[@id='cancel_order']");
-    public void clickComebackbutton()
-    {
-        driver.findElement(comebackLocator).click();
-    }
 }
-
