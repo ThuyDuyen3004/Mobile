@@ -11,7 +11,7 @@
             <class name="Test.TC07"/>
             <class name="Test.TC_08"/>
             <class name="Test.AddProductNegativeTests"/>
-            <class name="Test.TC07"/>
+
         </classes>
     </test>
 </suite>

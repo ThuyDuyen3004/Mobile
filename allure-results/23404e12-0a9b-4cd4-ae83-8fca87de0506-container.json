@@ -1,1 +1,0 @@
-{"uuid":"23404e12-0a9b-4cd4-ae83-8fca87de0506","name":"Test.TC06.setup","children":["07cf8a42-311e-4a8d-ae68-8402e7ded94d"],"description":"","befores":[{"name":"setup","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1752222986462,"stop":1752222987905}],"afters":[],"start":1752222986461,"stop":1752222987905}

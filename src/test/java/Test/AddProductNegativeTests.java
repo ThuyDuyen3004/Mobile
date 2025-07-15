@@ -17,148 +17,126 @@ import java.time.Duration;
 
 public class AddProductNegativeTests {
 
-    @Test(description = "TC09 - Add Product with Empty Fields")
-    public void TC09_emptyFields() throws InterruptedException {
-
+    @Test(description = "Add product failed")
+    public void addProductFailed() throws InterruptedException {
         SoftAssert softAssert = new SoftAssert();
+        // Step 1
+        driver.get(Constants.URL);
+        homePage.OpenLoginForm();
+        // Step 2
+        loginPage.login(Constants.USERNAME_ADMIN, Constants.PASSWORD_ADMIN);
 
+        // Step 3
+        driver.get(Constants.URL_ADMIN);
+        categories.goToCategoryByName("Products");
+        viewProductPage.clickAddProductButton();
+
+
+        // TC 09 - Add Product with Empty Fields
         addProductsPage.clickSaveButton();
-        softAssert.assertEquals(addProductsPage.getSecondDangerTextByLabel("Name"),
+        softAssert.assertEquals(addProductsPage.getTextByLabel("Name"),
                 "Vui lòng nhập Họ và tên", "Missing name should show error");
 
-        softAssert.assertEquals(addProductsPage.getSecondDangerTextByLabel("Price"),
+        softAssert.assertEquals(addProductsPage.getTextByLabel("Price"),
                 "Vui lòng nhập giá sản phẩm", "Missing price should show error");
 
-        softAssert.assertEquals(addProductsPage.getSecondDangerTextByLabel("Quality"),
+        softAssert.assertEquals(addProductsPage.getTextByLabel("Quality"),
                 "Vui lòng nhập số lượng sản phẩm", "Missing quality should show error");
 
-        softAssert.assertEquals(addProductsPage.getSecondDangerTextByLabel("Sale"),
+        softAssert.assertEquals(addProductsPage.getTextByLabel("Sale"),
                 "Vui lòng nhập giảm giá sản phẩm", "Missing sales should show error");
 
-        softAssert.assertEquals(addProductsPage.getSecondDangerTextByLabel("Manufactures"),
+        softAssert.assertEquals(addProductsPage.getTextByLabel("Manufactures"),
                 "Vui lòng chọn hãng sản xuất", "Missing Manufactures should show error");
 
-        softAssert.assertEquals(addProductsPage.getSecondDangerTextByLabel("Image"),
+        softAssert.assertEquals(addProductsPage.getTextByLabel("Image"),
                 "Vui lòng chọn ảnh", "Missing image should show error");
 
-        softAssert.assertEquals(addProductsPage.getSecondDangerTextByLabel("Specification"),
+        softAssert.assertEquals(addProductsPage.getTextByLabel("Specification"),
                 "Vui lòng nhập nội dung", "Missing specification should show error");
 
-        String alert = addProductsPage.getAlertMessageError();
-        softAssert.assertEquals(alert, "ko thành cong",
-                "Missing required fields should show error");
 
-        softAssert.assertAll();
-    }
+        softAssert.assertEquals(addProductsPage.getAlertMessageError(), "ko thành cong",
+                "Missing required fields should show error with Empty Fields");
 
-    @Test(description = "TC10 - Add Product with Invalid Price")
-    public void TC10_invalidPrice() throws InterruptedException {
-        SoftAssert softAssert = new SoftAssert();
-
+        // Data for the next test
         String imagePath = Constants.IMAGE_PATH_PNG;
+        String imagePathPDF = Constants.IMAGE_PATH_PDF;
         String nameProduct = faker.lorem().characters(7);
-        String price = "abc"; // Invalid price
+
+        String priceInvalid = "abc"; // Invalid price
+        String price = faker.number().digits(5).toString();
+
         String quality = faker.number().digits(3).toString();
+        String qualityNegative = String.valueOf((faker.number().numberBetween(-999, -100))); // Negative quality
+
+
         String sale = faker.number().digits(2).toString();
         String manufacture = "Apple";
+
         String specification = faker.gameOfThrones().character();
+        String specificationEmpty = ""; // Empty specification
 
+        //TC 10 - Add Product with Invalid Price
         product = new Product(nameProduct,
-                price, quality, sale, manufacture,
+                priceInvalid, quality, sale, manufacture,
                 specification, imagePath);
-
         addProductsPage.addProduct(product);
 
-        softAssert.assertEquals(addProductsPage.getSecondDangerTextByLabel("Price"),
+        softAssert.assertEquals(addProductsPage.getTextByLabel("Price"),
                 "Giá phải là số và bé hơn 1 tỉ", "Invalid price should show error");
 
-        String alert = addProductsPage.getAlertMessageError();
-        softAssert.assertEquals(alert, "ko thành cong",
-                "Missing required fields should show error");
+        softAssert.assertEquals(addProductsPage.getAlertMessageError(), "ko thành cong",
+                "Missing required fields should show error with Invalid Price");
 
-        softAssert.assertAll();
-    }
 
-    @Test(description = "TC11 - Add Product with Negative Quantity")
-    public void TC11_negativeQuantity() throws InterruptedException {
-        SoftAssert softAssert = new SoftAssert();
 
-        String imagePath = Constants.IMAGE_PATH_PNG;
-        String nameProduct = faker.lorem().characters(7);
-        String price = faker.number().digits(5).toString();
-        String quality = String.valueOf((faker.number().numberBetween(-999, -100))); // Negative quality
-        String sale = faker.number().digits(2).toString();
-        String manufacture = "Apple";
-        String specification = faker.gameOfThrones().character();
-
+        // TC 11 - Add Product with Negative Quantity
         product = new Product(nameProduct,
-                price, quality, sale, manufacture,
+                price, qualityNegative, sale, manufacture,
                 specification, imagePath);
 
         addProductsPage.addProduct(product);
 
-        String alert = addProductsPage.getAlertMessageError();
-        softAssert.assertEquals(alert, "ko thành cong",
-                "Missing required fields should show error");
+        softAssert.assertEquals(addProductsPage.getAlertMessageError(), "ko thành cong",
+                "Missing required fields should show error with Negative Quantity");
 
-        softAssert.assertAll();
-    }
+        // Close the alert message
+        addProductsPage.closeAlertMessageSuccess();
 
-    @Test(description = "TC12 - Add Product with Invalid Image Type")
-    public void TC12_invalidImageType() throws InterruptedException {
-        SoftAssert softAssert = new SoftAssert();
-
-        String imagePath = Constants.IMAGE_PATH_PDF;
-        String nameProduct = faker.lorem().characters(7);
-        String price = faker.number().digits(5).toString();
-        String quality = faker.number().digits(2).toString();
-        String sale = faker.number().digits(2).toString();
-        String manufacture = "Apple";
-        String specification = faker.gameOfThrones().character();
-
+        // TC 12 - Add Product with Invalid Image Type
         product = new Product(nameProduct,
                 price, quality, sale, manufacture,
-                specification, imagePath);
+                specification, imagePathPDF);
 
         addProductsPage.addProduct(product);
-        softAssert.assertEquals(addProductsPage.getSecondDangerTextByLabel("Image"),
+        softAssert.assertEquals(addProductsPage.getTextByLabel("Image"),
                 "Ảnh ko đúng định dạng", "Invalid image type should show error");
 
-        String alert = addProductsPage.getAlertMessageError();
-        softAssert.assertEquals(alert, "ko thành cong",
-                "Missing required fields should show error");
 
-        softAssert.assertAll();
-    }
+        softAssert.assertEquals(addProductsPage.getAlertMessageError(), "ko thành cong",
+                "Missing required fields should show error with Invalid Image Type");
 
-    @Test(description = "TC13 - Add Product with Empty Specification")
-    public void TC13_emptySpecification() throws InterruptedException {
-        SoftAssert softAssert = new SoftAssert();
-
-        String imagePath = Constants.IMAGE_PATH_PNG;
-        String nameProduct = faker.lorem().characters(7);
-        String price = faker.number().digits(5).toString();
-        String quality = faker.number().digits(2).toString();
-        String sale = faker.number().digits(2).toString();
-        String manufacture = "Apple";
-        String specification = ""; // Empty specification
-
+        // TC 13 - Add Product with Empty Specification
         product = new Product(nameProduct,
                 price, quality, sale, manufacture,
-                specification, imagePath);
+                specificationEmpty, imagePath);
 
         addProductsPage.addProduct(product);
-        softAssert.assertEquals(addProductsPage.getSecondDangerTextByLabel("Specification"),
+        softAssert.assertEquals(addProductsPage.getTextByLabel("Specification"),
                 "Vui lòng nhập nội dung", "Missing specification should show error");
 
-        String alert = addProductsPage.getAlertMessageError();
-        softAssert.assertEquals(alert, "ko thành cong",
-                "Missing required fields should show error");
+
+        softAssert.assertEquals(addProductsPage.getAlertMessageError(), "ko thành cong",
+                "Missing required fields should show error with Empty Specification");
 
         softAssert.assertAll();
     }
+
+
     @BeforeClass
     public void setUp() throws InterruptedException {
+
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get(Constants.URL);
@@ -171,16 +149,8 @@ public class AddProductNegativeTests {
         loginPage = new LoginPage(driver);
         homePage = new HomePage(driver);
         faker = new Faker();
-        // Step 1
-        driver.get(Constants.URL);
-        homePage.OpenLoginForm();
-        // Step 2
-        loginPage.login(Constants.USERNAME_ADMIN, Constants.PASSWORD_ADMIN);
 
-        // Step 3
-        driver.get(Constants.URL_ADMIN);
-        categories.goToCategoryByName("Products");
-        viewProductPage.clickAddProductButton();
+
 
 
     }

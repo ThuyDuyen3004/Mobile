@@ -24,11 +24,17 @@ public class AddProductsPage {
     private By uploadImageLocator = By.xpath("//input[@type='file']");
 
     private By alertMessageSuccessLocator = By.xpath("//p[contains(@class, 'alert-success')]");
+    private By closeAlertSuccessLocator = By.xpath("//button[@class='close' and @data-dismiss='alert']");
     private By alertMessageErrorLocator = By.xpath("//div[@class='box-body']");
 
     public AddProductsPage(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
         this.wait = wait;
+    }
+    @Step("Close alert message success")
+    public void closeAlertMessageSuccess() {
+        WebElement closeButton = wait.until(ExpectedConditions.visibilityOfElementLocated(closeAlertSuccessLocator));
+        closeButton.click();
     }
     @Step("Get alert message error")
     public String getAlertMessageError() {
@@ -37,7 +43,7 @@ public class AddProductsPage {
     }
 
     @Step("Get content error by label text")
-    public String getSecondDangerTextByLabel(String labelText) {
+    public String getTextByLabel(String labelText) {
         String xpath = String.format("//label[contains(text(), '%s')]/span[@class='text-danger'][2]", labelText);
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
         return element.getText().trim();
