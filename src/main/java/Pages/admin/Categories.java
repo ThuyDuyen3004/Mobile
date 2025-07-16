@@ -18,13 +18,13 @@ public class Categories {
         this.driver = driver;
         this.wait = wait;
     }
+
     @Step("Go to category by name: {categoryName}")
     public void goToCategoryByName(String categoryName) {
         List<WebElement> categories = driver.findElements(categoriesLocator);
         for (WebElement category : categories) {
             if (category.getText().trim().contentEquals(categoryName.trim())) {
                 category.click();
-
                 break;
             }
         }

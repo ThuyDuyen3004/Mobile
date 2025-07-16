@@ -1,22 +1,13 @@
 package Test;
-import Pages.admin.AddProductsPage;
-import Pages.admin.Categories;
-import Pages.admin.Product;
-import Pages.admin.ViewProductPage;
-import Pages.user.HomePage;
-import Pages.user.LoginPage;
-import com.github.javafaker.Faker;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.*;
+
+import Common.BaseTest;
+import Models.Product;
+import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import utils.Constants;
 
-import java.time.Duration;
+public class AddProductNegativeTests extends BaseTest {
 
-public class AddProductNegativeTests {
-    // hihiihi
     @Test(description = "Add product failed")
     public void addProductFailed() throws InterruptedException {
         SoftAssert softAssert = new SoftAssert();
@@ -28,7 +19,7 @@ public class AddProductNegativeTests {
 
         // Step 3
         driver.get(Constants.URL_ADMIN);
-        categories.goToCategoryByName("Products");
+        categories.openProductPage();
         viewProductPage.clickAddProductButton();
 
 
@@ -65,13 +56,13 @@ public class AddProductNegativeTests {
         String nameProduct = faker.lorem().characters(7);
 
         String priceInvalid = "abc"; // Invalid price
-        String price = faker.number().digits(5).toString();
+        String price = String.valueOf(faker.number().numberBetween(10000, 99999));
 
-        String quality = faker.number().digits(3).toString();
+        String quality = String.valueOf(faker.number().numberBetween(100, 999));
         String qualityNegative = String.valueOf((faker.number().numberBetween(-999, -100))); // Negative quality
 
 
-        String sale = faker.number().digits(2).toString();
+        String sale = String.valueOf(faker.number().numberBetween(10, 99));
         String manufacture = "Apple";
 
         String specification = faker.gameOfThrones().character();
@@ -90,9 +81,9 @@ public class AddProductNegativeTests {
                 "Missing required fields should show error with Invalid Price");
 
         // TC 11 - Add Product with Negative Quantity
-        product = new Product(nameProduct,
-                price, qualityNegative, sale, manufacture,
-                specification, imagePath);
+        product.setPrice(price);
+        product.setQuality(qualityNegative);
+
 
         addProductsPage.addProduct(product);
 
@@ -103,9 +94,8 @@ public class AddProductNegativeTests {
         addProductsPage.closeAlertMessageSuccess();
 
         // TC 12 - Add Product with Invalid Image Type
-        product = new Product(nameProduct,
-                price, quality, sale, manufacture,
-                specification, imagePathPDF);
+        product.setImagePath(imagePathPDF);
+
 
         addProductsPage.addProduct(product);
         softAssert.assertEquals(addProductsPage.getTextByLabel("Image"),
@@ -116,9 +106,8 @@ public class AddProductNegativeTests {
                 "Missing required fields should show error with Invalid Image Type");
 
         // TC 13 - Add Product with Empty Specification
-        product = new Product(nameProduct,
-                price, quality, sale, manufacture,
-                specificationEmpty, imagePath);
+        product.setSpecification(specificationEmpty);
+
 
         addProductsPage.addProduct(product);
         softAssert.assertEquals(addProductsPage.getTextByLabel("Specification"),
@@ -130,43 +119,6 @@ public class AddProductNegativeTests {
 
         softAssert.assertAll();
     }
-
-
-    @BeforeClass
-    public void setUp() throws InterruptedException {
-
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get(Constants.URL);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        softAssert = new SoftAssert();
-
-        categories = new Categories(driver, wait);
-        addProductsPage = new AddProductsPage(driver, wait);
-        viewProductPage = new ViewProductPage(driver, wait);
-        loginPage = new LoginPage(driver);
-        homePage = new HomePage(driver);
-        faker = new Faker();
-
-
-    }
-
-    @AfterClass
-    public void tearDown() {
-
-        driver.quit();
-
-    }
-    WebDriver driver;
-    WebDriverWait wait;
-    SoftAssert softAssert;
-    Categories categories;
-    AddProductsPage addProductsPage;
-    ViewProductPage viewProductPage;
-    HomePage homePage;
-    LoginPage loginPage;
-    Product product;
-    Faker faker;
 
 
 }

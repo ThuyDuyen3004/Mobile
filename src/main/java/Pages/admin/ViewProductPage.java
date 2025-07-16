@@ -1,5 +1,6 @@
 package Pages.admin;
 
+import Models.Product;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -30,48 +31,50 @@ public class ViewProductPage {
 
     @Step("Get Title of View Product Page")
     public String getTitleViewProductPage() {
-        WebElement titleViewProductPageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(titleViewProductPageLocator));
+        WebElement titleViewProductPageElement = driver.findElement(titleViewProductPageLocator);
         String titleViewProductPage = titleViewProductPageElement.getText().trim();
         return titleViewProductPage;
     }
 
-    @Step("Get Name of the first product")
-    public String getNameProduct() {
-        WebElement nameProductElement = wait.until(ExpectedConditions.visibilityOfElementLocated(nameProductsLocator));
+    @Step("Get Name product")
+    public String getNameProduct(int index) {
+        WebElement nameProductElement = driver.findElement(By.xpath("//*[@id='view']/tbody/tr[" + index + "]/td[2]"));
         String nameProduct = nameProductElement.getText().trim();
         return nameProduct;
     }
-    @Step("Get Price of the first product")
-    public String getPriceProduct() {
-        WebElement priceProductElement = wait.until(ExpectedConditions.visibilityOfElementLocated(priceProductsLocator));
+
+    @Step("Get Price product")
+    public String getPriceProduct(int index) {
+        WebElement priceProductElement = driver.findElement(By.xpath("//*[@id='view']/tbody/tr[" + index + "]/td[3]"));
 
         String priceProduct = priceProductElement.getText().trim().
-                replace("đ", "").replace(",","" );
+                replace("đ", "").replace(",", "");
 
         return priceProduct;
     }
 
-    @Step("Get Quality of the first product")
-    public String getQualityProduct() {
-        WebElement qualityProductElement = wait.until(ExpectedConditions.visibilityOfElementLocated(qualityProductsLocator));
+    @Step("Get Quality product")
+    public String getQualityProduct(int index) {
+        WebElement qualityProductElement = driver.findElement(By.xpath("//*[@id='view']/tbody/tr[" + index + "]/td[4]"));
         String qualityProduct = qualityProductElement.getText().split(" ")[0].trim();
         return qualityProduct;
     }
 
-    @Step("Get Sale of the first product")
-    public String getSaleProduct() {
-        WebElement saleProductElement = wait.until(ExpectedConditions.visibilityOfElementLocated(saleProductsLocator));
+    @Step("Get Sale product")
+    public String getSaleProduct(int index) {
+        WebElement saleProductElement = driver.findElement(By.xpath("//*[@id='view']/tbody/tr[" + index + "]/td[5]"));
         String saleProduct = saleProductElement.getText().replace("%", "").trim();
         return saleProduct;
     }
-    @Step("Get Manufacture of the first product")
-    public String getMunafacturesProduct() {
-        WebElement munafacturesProductElement = wait.until(ExpectedConditions.visibilityOfElementLocated(munafacturesProductsLocator));
+
+    @Step("Get Manufacture product")
+    public String getMunafacturesProduct(int index) {
+        WebElement munafacturesProductElement = driver.findElement(By.xpath("//*[@id='view']/tbody/tr[" + index + "]/td[6]"));
         String munafacturesProduct = munafacturesProductElement.getText().trim();
         return munafacturesProduct;
     }
 
-    @Step("Get ID of the first product")
+    @Step("Get ID product")
     public int getIdProduct() {
         WebElement idProductElement = wait.until(ExpectedConditions.visibilityOfElementLocated(idProductsLocator));
         String idProduct = idProductElement.getText().trim();
@@ -80,7 +83,20 @@ public class ViewProductPage {
 
     @Step("Click Add Product Button")
     public void clickAddProductButton() {
-        WebElement addProductButton = wait.until(ExpectedConditions.elementToBeClickable(addProductButtonLocator));
+        WebElement addProductButton = driver.findElement(addProductButtonLocator);
         addProductButton.click();
+    }
+
+    @Step("Get Product by index in the table")
+    public Product getProductByIndex(int index) {
+        if (index == 0) {
+            index = 1; // Default to the first product if index is 0
+        }
+        String name = getNameProduct(index);
+        String price = getPriceProduct(index);
+        String quality = getQualityProduct(index);
+        String sale = getSaleProduct(index);
+        String manufacture = getMunafacturesProduct(index);
+        return new Product(name, price, quality, sale, manufacture);
     }
 }

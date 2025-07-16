@@ -1,5 +1,6 @@
 package Pages.admin;
 
+import Models.Product;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -7,9 +8,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.Test;
-
-import java.time.Duration;
 
 public class AddProductsPage {
     private WebDriver driver;
@@ -31,11 +29,13 @@ public class AddProductsPage {
         this.driver = driver;
         this.wait = wait;
     }
+
     @Step("Close alert message success")
     public void closeAlertMessageSuccess() {
         WebElement closeButton = wait.until(ExpectedConditions.visibilityOfElementLocated(closeAlertSuccessLocator));
         closeButton.click();
     }
+
     @Step("Get alert message error")
     public String getAlertMessageError() {
         WebElement alertMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(alertMessageErrorLocator));
@@ -48,11 +48,13 @@ public class AddProductsPage {
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
         return element.getText().trim();
     }
+
     @Step("Get alert message success")
     public String getAlertMessageSuccess() {
         WebElement alertMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(alertMessageSuccessLocator));
         return alertMessage.getText().replace("×", "").trim();
     }
+
     @Step("Click save button")
     public void clickSaveButton() {
         WebElement saveButton = driver.findElement(saveButtonLocator);
@@ -71,30 +73,35 @@ public class AddProductsPage {
         Select select = new Select(selectElement);
         select.selectByVisibleText(visibleText);
     }
+
     @Step("Enter product name")
     public void enterName(String name) {
         WebElement nameInput = driver.findElement(nameInputLocator);
         nameInput.clear();
         nameInput.sendKeys(name);
     }
+
     @Step("Enter product Price")
     public void enterPrice(String price) {
         WebElement priceInput = driver.findElement(priceInputLocator);
         priceInput.clear();
         priceInput.sendKeys(price);
     }
+
     @Step("Enter product quality")
     public void enterQuality(String quality) {
         WebElement qualityInput = driver.findElement(qualityInputLocator);
         qualityInput.clear();
         qualityInput.sendKeys(quality);
     }
+
     @Step("Enter product sales")
     public void enterSales(String sales) {
         WebElement salesInput = driver.findElement(salesInputLocator);
         salesInput.clear();
         salesInput.sendKeys(sales);
     }
+
     @Step("Enter product Specification")
     public void fillSpecification(String htmlContent) throws InterruptedException {
         // 1. Switch vào iframe CKEditor
@@ -112,6 +119,7 @@ public class AddProductsPage {
         // 3. Quay lại nội dung chính
         driver.switchTo().defaultContent();
     }
+
     @Step("Upload product image")
     public void uploadImage(String imagePath) {
 
@@ -122,7 +130,7 @@ public class AddProductsPage {
         uploadInput.sendKeys(imagePath);
     }
 
-//    public void addProduct(String name, String price, String quality, String sales, String manufacture, String specification) throws InterruptedException {
+    //    public void addProduct(String name, String price, String quality, String sales, String manufacture, String specification) throws InterruptedException {
 //        enterName(name);
 //        enterPrice(price);
 //        enterQuality(quality);

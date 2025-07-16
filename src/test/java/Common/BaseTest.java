@@ -1,8 +1,8 @@
 package Common;
 
+import Models.Product;
 import Pages.admin.AddProductsPage;
 import Pages.admin.Categories;
-import Pages.admin.Product;
 import Pages.admin.ViewProductPage;
 import Pages.user.*;
 import com.github.javafaker.Faker;
@@ -28,13 +28,13 @@ public class BaseTest {
     protected PaymentPage paymentPage;
     protected SearchPage searchPage;
 
-    Categories categories;
-    AddProductsPage addProductsPage;
-    ViewProductPage viewProductPage;
+    protected Categories categories;
+    protected AddProductsPage addProductsPage;
+    protected ViewProductPage viewProductPage;
 
-    Product product;
-    Faker faker;
-    Product productAfterAdd;
+    protected Product product;
+    protected Faker faker;
+
 
     @BeforeMethod
     public void setup() {
@@ -49,14 +49,13 @@ public class BaseTest {
         orderPage = new OrderPage(driver);
         paymentPage = new PaymentPage(driver);
         searchPage = new SearchPage(driver);
+
         categories = new Categories(driver, wait);
         addProductsPage = new AddProductsPage(driver, wait);
         viewProductPage = new ViewProductPage(driver, wait);
-        loginPage = new LoginPage(driver);
-        homePage = new HomePage(driver);
+
         faker = new Faker();
-        addProductsPage = new AddProductsPage(driver, wait);
-        viewProductPage = new ViewProductPage(driver, wait);
+
     }
 
     @AfterMethod
