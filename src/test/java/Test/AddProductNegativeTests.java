@@ -2,18 +2,37 @@ package Test;
 
 import Common.BaseTest;
 import Models.Product;
+import com.github.javafaker.Faker;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import utils.Constants;
 
 public class AddProductNegativeTests extends BaseTest {
 
+
+    Faker faker = new Faker();
+
+
+    String imagePath = Constants.IMAGE_PATH_PNG;
+    String imagePathPDF = Constants.IMAGE_PATH_PDF;
+    String nameProduct = faker.lorem().characters(7);
+    String priceInvalid = "abc"; // Invalid price
+    String price = String.valueOf(faker.number().numberBetween(10000, 99999));
+    String quality = String.valueOf(faker.number().numberBetween(100, 999));
+    String qualityNegative = String.valueOf(faker.number().numberBetween(-999, -100)); // Negative quality
+    String sale = String.valueOf(faker.number().numberBetween(10, 99));
+    String manufacture = "Apple";
+    String specification = faker.gameOfThrones().character();
+    String specificationEmpty = ""; // Empty specification
+
     @Test(description = "Add product failed")
     public void addProductFailed() throws InterruptedException {
         SoftAssert softAssert = new SoftAssert();
+
         // Step 1
         driver.get(Constants.URL);
         homePage.OpenLoginForm();
+
         // Step 2
         loginPage.login(Constants.USERNAME_ADMIN, Constants.PASSWORD_ADMIN);
 
@@ -22,8 +41,7 @@ public class AddProductNegativeTests extends BaseTest {
         categories.openProductPage();
         viewProductPage.clickAddProductButton();
 
-
-        // TC 09 - Add Product with Empty Fields
+        // TC09 - Add Product with Empty Fields
         addProductsPage.clickSaveButton();
         softAssert.assertEquals(addProductsPage.getTextByLabel("Name"),
                 "Vui lòng nhập Họ và tên", "Missing name should show error");
@@ -46,79 +64,49 @@ public class AddProductNegativeTests extends BaseTest {
         softAssert.assertEquals(addProductsPage.getTextByLabel("Specification"),
                 "Vui lòng nhập nội dung", "Missing specification should show error");
 
-
         softAssert.assertEquals(addProductsPage.getAlertMessageError(), "ko thành cong",
                 "Missing required fields should show error with Empty Fields");
 
-        // Data for the next test
-        String imagePath = Constants.IMAGE_PATH_PNG;
-        String imagePathPDF = Constants.IMAGE_PATH_PDF;
-        String nameProduct = faker.lorem().characters(7);
-
-        String priceInvalid = "abc"; // Invalid price
-        String price = String.valueOf(faker.number().numberBetween(10000, 99999));
-
-        String quality = String.valueOf(faker.number().numberBetween(100, 999));
-        String qualityNegative = String.valueOf((faker.number().numberBetween(-999, -100))); // Negative quality
-
-
-        String sale = String.valueOf(faker.number().numberBetween(10, 99));
-        String manufacture = "Apple";
-
-        String specification = faker.gameOfThrones().character();
-        String specificationEmpty = ""; // Empty specification
-
-        //TC 10 - Add Product with Invalid Price
-        product = new Product(nameProduct,
-                priceInvalid, quality, sale, manufacture,
-                specification, imagePath);
+        // TC10 - Add Product with Invalid Price
+        product = new Product(nameProduct, priceInvalid, quality, sale, manufacture, specification, imagePath);
         addProductsPage.addProduct(product);
 
         softAssert.assertEquals(addProductsPage.getTextByLabel("Price"),
                 "Giá phải là số và bé hơn 1 tỉ", "Invalid price should show error");
 
         softAssert.assertEquals(addProductsPage.getAlertMessageError(), "ko thành cong",
-                "Missing required fields should show error with Invalid Price");
+                "Invalid price should trigger error alert");
 
-        // TC 11 - Add Product with Negative Quantity
+        // TC11 - Add Product with Negative Quantity
         product.setPrice(price);
         product.setQuality(qualityNegative);
-
-
         addProductsPage.addProduct(product);
 
         softAssert.assertEquals(addProductsPage.getAlertMessageError(), "ko thành cong",
-                "Missing required fields should show error with Negative Quantity");
-
-        // Close the alert message
+                "Negative quantity should trigger error alert");
+        Thread.sleep(1000);
         addProductsPage.closeAlertMessageSuccess();
 
-        // TC 12 - Add Product with Invalid Image Type
+        // TC12 - Add Product with Invalid Image Type
         product.setImagePath(imagePathPDF);
-
-
         addProductsPage.addProduct(product);
+
         softAssert.assertEquals(addProductsPage.getTextByLabel("Image"),
                 "Ảnh ko đúng định dạng", "Invalid image type should show error");
 
-
         softAssert.assertEquals(addProductsPage.getAlertMessageError(), "ko thành cong",
-                "Missing required fields should show error with Invalid Image Type");
+                "Invalid image type should trigger error alert");
 
-        // TC 13 - Add Product with Empty Specification
+        // TC13 - Add Product with Empty Specification
         product.setSpecification(specificationEmpty);
-
-
         addProductsPage.addProduct(product);
-        softAssert.assertEquals(addProductsPage.getTextByLabel("Specification"),
-                "Vui lòng nhập nội dung", "Missing specification should show error");
 
+        softAssert.assertEquals(addProductsPage.getTextByLabel("Specification"),
+                "Vui lòng nhập nội dung", "Empty specification should show error");
 
         softAssert.assertEquals(addProductsPage.getAlertMessageError(), "ko thành cong",
-                "Missing required fields should show error with Empty Specification");
+                "Empty specification should trigger error alert");
 
         softAssert.assertAll();
     }
-
-
 }

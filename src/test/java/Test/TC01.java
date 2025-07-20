@@ -2,6 +2,7 @@ package Test;
 
 import Common.BaseTest;
 import Pages.user.*;
+import io.qameta.allure.Issue;
 import jdk.jfr.Description;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Random;
 
 public class TC01 extends BaseTest {
-
+    @Issue("F001")
     @Test
     @Description("Verify that the user can purchase a product successfully when all information fields are valid")
     public void VerifySuccessfulPurchase() throws InterruptedException {

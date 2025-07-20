@@ -89,9 +89,7 @@ public class ViewProductPage {
 
     @Step("Get Product by index in the table")
     public Product getProductByIndex(int index) {
-        if (index == 0) {
-            index = 1; // Default to the first product if index is 0
-        }
+
         String name = getNameProduct(index);
         String price = getPriceProduct(index);
         String quality = getQualityProduct(index);

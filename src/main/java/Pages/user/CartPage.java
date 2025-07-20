@@ -26,8 +26,9 @@ public class CartPage {
 
 
     private final By iconClose = By.xpath("//div[@id='cart_modal']//button[@type='button' and normalize-space()='×']");
-    By OrderbuttonLocator=By.id("order_product");
+    By OrderbuttonLocator = By.id("order_product");
     By TotalPrice = By.xpath("(//label[contains(@class, 'toal_money')])/span");
+
     public CartPage(WebDriver webDriver) {
         this.webDriver = webDriver;
         this.wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
@@ -45,12 +46,14 @@ public class CartPage {
         return row.findElements(By.tagName("td"))
                 .get(COLUMN_NAMES.indexOf("Tên sản phẩm")).getText().trim();
     }
+
     @Step("Get discount at row {index}")
     public String getDiscountByIndex(int index) {
         WebElement row = getRowElementByIndex(index);
         return row.findElements(By.tagName("td"))
                 .get(COLUMN_NAMES.indexOf("Giảm giá")).getText().trim();
     }
+
     @Step("Get unit price at row {index}")
     public double getUnitPriceByIndex(int index) {
         WebElement row = getRowElementByIndex(index);
@@ -71,6 +74,7 @@ public class CartPage {
         String quantity = selectedOption.getText().trim();
         return Integer.parseInt(quantity);
     }
+
     @Step("Get subtotal at row {index}")
 
     public double getSubtotalByIndex(int index) {
@@ -79,11 +83,13 @@ public class CartPage {
                 .get(COLUMN_NAMES.indexOf("Thành tiền")).getText().trim();
         return parseCurrencyToDouble(text);
     }
+
     @Step("Get discount as double at row {index}")
     public double getDiscountAsDoubleByIndex(int index) {
         String text = getDiscountByIndex(index).trim();
         return parsePercentToDouble(text);
     }
+
     @Step("Verify subtotal at row {index}")
     public boolean isSubtotalCorrect(int index) {
         int quantity = getQuantityByIndex(index);
@@ -132,6 +138,7 @@ public class CartPage {
         String totalText = totalElement.getText().replace("đ", "").replace(".", "").replace(",", "").trim();
         return Double.parseDouble(totalText);
     }
+
     @Step("Calculate total of all subtotals")
     public double calculateTotalSubtotal() {
         List<WebElement> rows = webDriver.findElements(By.xpath("//table/tbody/tr"));
@@ -141,6 +148,7 @@ public class CartPage {
         }
         return total;
     }
+
     @Step("Verify total price matches the sum of all subtotals")
     public boolean isTotalPriceCorrect() {
         double expectedTotal = calculateTotalSubtotal();
@@ -153,27 +161,42 @@ public class CartPage {
         WebElement orderButton = wait.until(ExpectedConditions.elementToBeClickable(OrderbuttonLocator));
         orderButton.click();
     }
+
     //
     @Step("Get product name, price, and discount from Cartpage")
+//
+    private int getColumnIndex(String columnName) {
+        return COLUMN_NAMES.indexOf(columnName) + 1;
+    }
+
+    public int getTotalProduct() {
+        List<WebElement> cartItems = webDriver.findElements(By.xpath("//tbody/tr"));
+        return cartItems.size() - 1;
+    }
+
+    private WebElement getCell(int row, int column) {
+        String xpath = String.format("//tbody/tr[%d]/td[%d]", row, column);
+        return webDriver.findElement(By.xpath(xpath));
+    }
+
     public ArrayList<CartItem> getAllCartItems() {
         WaitUtils.sleep(2);
-
         ArrayList<CartItem> cartItemList = new ArrayList<>();
 
-        List<WebElement> cartItems = webDriver.findElements(By.xpath("//tbody/tr"));
+        int totalProducts = getTotalProduct();
 
-        for (int i = 1; i < cartItems.size(); i++) {
-            String name = webDriver.findElement(By.xpath("//tbody/tr[" + i + "]/td[2]")).getText();
-            String priceText = webDriver.findElement(By.xpath("//tbody/tr[" + i + "]/td[5]")).getText().replaceAll("[^\\d.]", "");
+        for (int i = 1; i <= totalProducts; i++) {
+            String name = getCell(i, getColumnIndex("Tên sản phẩm")).getText();
+            String priceText = getCell(i, getColumnIndex("Đơn giá")).getText().replaceAll("[^\\d.]", "");
             double price = Double.parseDouble(priceText);
-            String promotion = webDriver.findElement(By.xpath("//tbody/tr[" + i + "]/td[3]")).getText();
+            String promotion = getCell(i, getColumnIndex("Giảm giá")).getText();
 
             cartItemList.add(new CartItem(name, price, promotion));
-
-           // System.out.println("Cart Item " + i + ": " + name + ", Price: " + price + ", Promotion: " + promotion);
+            //  System.out.println("Cart Item " + i + ": " + name + ", Price: " + price + ", Promotion: " + promotion);
         }
 
         return cartItemList;
     }
+
 
 }
