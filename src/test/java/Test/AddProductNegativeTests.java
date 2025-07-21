@@ -3,6 +3,7 @@ package Test;
 import Common.BaseTest;
 import Models.Product;
 import com.github.javafaker.Faker;
+import io.qameta.allure.Issue;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import utils.Constants;
@@ -11,8 +12,6 @@ public class AddProductNegativeTests extends BaseTest {
 
 
     Faker faker = new Faker();
-
-
     String imagePath = Constants.IMAGE_PATH_PNG;
     String imagePathPDF = Constants.IMAGE_PATH_PDF;
     String nameProduct = faker.lorem().characters(7);
@@ -25,6 +24,7 @@ public class AddProductNegativeTests extends BaseTest {
     String specification = faker.gameOfThrones().character();
     String specificationEmpty = ""; // Empty specification
 
+    @Issue("F005")
     @Test(description = "Add product failed")
     public void addProductFailed() throws InterruptedException {
         SoftAssert softAssert = new SoftAssert();

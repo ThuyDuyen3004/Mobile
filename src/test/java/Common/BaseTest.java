@@ -6,9 +6,13 @@ import Pages.admin.Categories;
 import Pages.admin.ViewProductPage;
 import Pages.user.*;
 import com.github.javafaker.Faker;
+import io.qameta.allure.Attachment;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.asserts.SoftAssert;
@@ -58,9 +62,19 @@ public class BaseTest {
 
     }
 
+    @Attachment(value = "Screenshot on failure", type = "image/png")
+    public byte[] takeScreenshot(String testName) {
+        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+    }
+
     @AfterMethod
-    public void tearDown() {
+    public void tearDown(ITestResult result) {
+        if (result.getStatus() == ITestResult.FAILURE) {
+            takeScreenshot(result.getName());
+        }
         driver.quit();
 
     }
+
+
 }
