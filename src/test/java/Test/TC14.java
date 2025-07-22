@@ -26,35 +26,6 @@ public class TC14 extends BaseTest {
 
         softAssert.assertAll();
     }
-    
-//    @BeforeClass
-//    public void setUp() {
-//        driver = new ChromeDriver();
-//        driver.manage().window().maximize();
-//        driver.get(Constants.URL);
-//        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//        softAssert = new SoftAssert();
-//
-//        categories = new Categories(driver, wait);
-//        addProductsPage = new AddProductsPage(driver, wait);
-//        viewProductPage = new ViewProductPage(driver, wait);
-//        loginPage = new LoginPage(driver);
-//        homePage = new HomePage(driver);
-//
-//    }
-//
-//    @AfterClass
-//    public void tearDown() {
-//
-//        driver.quit();
-//
-//    }
-//    WebDriver driver;
-//    WebDriverWait wait;
-//    SoftAssert softAssert;
-//    Categories categories;
-//    AddProductsPage addProductsPage;
-//    ViewProductPage viewProductPage;
-//    HomePage homePage;
-//    LoginPage loginPage;
+
+
 }
