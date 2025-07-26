@@ -39,6 +39,9 @@ public class BaseTest {
     protected Product product;
     protected Faker faker;
 
+    public WebDriver getDriver() {
+        return driver;
+    }
 
     @BeforeMethod
     public void setup() {
