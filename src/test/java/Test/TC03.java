@@ -34,12 +34,10 @@ public class TC03 extends BaseTest {
 
         cartPage.closeCartForm();
 
-
         homePage.logout();
 
         homePage.OpenLoginForm();
         loginPage.login(Constants.EMAIL, Constants.PASSWORD);
-
 
         int actualQuantity = homePage.QuatityInCart();
         softAssert.assertEquals(actualQuantity, 1, "Expected quantity in cart = 1 but got: " + actualQuantity);

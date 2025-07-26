@@ -31,7 +31,7 @@ public class ViewProductPage {
         this.wait = wait;
     }
 
-    public int getColumnIndexByName(String columnName) {
+    private int getColumnIndexByName(String columnName) {
 
         // Tìm tất cả các thẻ <th> (tiêu đề cột)
         List<WebElement> headers = driver.findElements(titleTableViewProductPageLocator);
@@ -49,7 +49,7 @@ public class ViewProductPage {
         throw new NoSuchElementException("Không tìm thấy cột với tên: " + columnName);
     }
 
-    public String getDataTableViewProductPage(int index, String columnName) {
+    private String getDataTableViewProductPage(int index, String columnName) {
         String columnNameTrimmed = String.format("//*[@id='view']/tbody/tr[%d]/td[%d]", index, getColumnIndexByName(columnName));
 
         return columnNameTrimmed;

@@ -6,15 +6,12 @@ import jdk.jfr.Description;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import utils.Constants;
-
-
 public class TC01 extends BaseTest {
     @Issue("F001")
     @Test
     @Description("Verify that the user can purchase a product successfully when all information fields are valid")
     public void VerifySuccessfulPurchase() throws InterruptedException {
         driver.get(Constants.URL);
-
         homePage.OpenLoginForm();
         loginPage.login(Constants.EMAIL, Constants.PASSWORD);
 
@@ -26,13 +23,11 @@ public class TC01 extends BaseTest {
         orderPage.EnterPassword(Constants.PASSWORD);
         orderPage.clickPayMentButton();
 
-
         // Lấy tên user từ fullname
         String username = orderPage.getFullName();
 
         // Lấy text cảm ơn
         String thankYouText = paymentPage.getThankYouText();
-
         String expectedThankYou = "Cảm ơn bạn " + username + " đã tin dùng sản phẩm của chúng tôi";
         Assert.assertEquals(thankYouText, expectedThankYou, "Thông báo cảm ơn không khớp!");
 
@@ -41,7 +36,6 @@ public class TC01 extends BaseTest {
 
         String expectedContact = "Chúng tôi sẽ liên hệ với bạn trong vòng 5 phút. Và giao hàng trong 30 phút.";
         Assert.assertEquals(contactText, expectedContact);
-
         softAssert.assertAll();
     }
 }
