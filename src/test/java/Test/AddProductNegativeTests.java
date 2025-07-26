@@ -1,13 +1,16 @@
 package Test;
 
 import Common.BaseTest;
+import Common.TestListener;
 import Models.Product;
 import com.github.javafaker.Faker;
 import io.qameta.allure.Issue;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import utils.Constants;
 
+@Listeners(TestListener.class)
 public class AddProductNegativeTests extends BaseTest {
 
 
