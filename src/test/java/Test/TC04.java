@@ -22,6 +22,10 @@ import java.util.Locale;
 import java.util.Random;
 
 public class TC04 extends BaseTest {
+    Faker faker = new Faker(new Locale("vi"));
+    String validName = faker.name().fullName();
+    String validAddress = faker.address().fullAddress();
+    String validPassword = Constants.PASSWORD;
 
     @Test
     @Description("Verify that the order form displays the correct validation messages when entering invalid data or leaving fields empty")
@@ -34,10 +38,7 @@ public class TC04 extends BaseTest {
         homePage.clickButtonAddToCartRandom();
 
         cartPage.ClickOrderButton();
-        Faker faker = new Faker(new Locale("vi"));
-        String validName = faker.name().fullName();
-        String validAddress = faker.address().fullAddress();
-        String validPassword = Constants.PASSWORD;
+
 
         // Step 5 - Leave the [Họ và tên] field empty
         orderPage.EnterFullname("");
