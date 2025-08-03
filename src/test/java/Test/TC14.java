@@ -1,10 +1,13 @@
 package Test;
 
 import Common.BaseTest;
+import Common.TestListener;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import utils.Constants;
 
+@Listeners(TestListener.class)
 public class TC14 extends BaseTest {
     @Test(description = "TC14 - Verify Cancel Button in Add Product Form")
     public void TC14_verifyCancelButtonInAddProductForm() throws InterruptedException {
