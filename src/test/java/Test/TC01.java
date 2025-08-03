@@ -9,7 +9,6 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import utils.Constants;
 
-@Listeners(TestListener.class)
 public class TC01 extends BaseTest {
     @Issue("F001")
     @Test
