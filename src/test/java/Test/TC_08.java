@@ -1,11 +1,14 @@
 package Test;
 
 import Common.BaseTest;
+import Common.TestListener;
 import Models.Product;
 import com.github.javafaker.Faker;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import utils.Constants;
 
+@Listeners(TestListener.class)
 public class TC_08 extends BaseTest {
 
     Faker faker = new Faker();

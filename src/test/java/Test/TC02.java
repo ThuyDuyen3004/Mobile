@@ -1,10 +1,13 @@
 package Test;
 
 import Common.BaseTest;
+import Common.TestListener;
 import jdk.jfr.Description;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import utils.Constants;
 
+@Listeners(TestListener.class)
 public class TC02 extends BaseTest {
 
     @Test

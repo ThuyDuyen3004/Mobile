@@ -1,33 +1,23 @@
-
 package Test;
 
 import Common.BaseTest;
-import Pages.user.*;
+import Common.TestListener;
 import com.github.javafaker.Faker;
+import io.qameta.allure.Issue;
 import jdk.jfr.Description;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
 import utils.Constants;
 
-import java.time.Duration;
-import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
+@Listeners(TestListener.class)
 public class TC04 extends BaseTest {
-
     Faker faker = new Faker(new Locale("vi"));
     String validName = faker.name().fullName();
     String validAddress = faker.address().fullAddress();
     String validPassword = Constants.PASSWORD;
-
+    @Issue("F003")
     @Test
     @Description("Verify that the order form displays the correct validation messages when entering invalid data or leaving fields empty")
     public void verifyOrderFormValidationMessages() throws InterruptedException {
@@ -39,7 +29,6 @@ public class TC04 extends BaseTest {
         homePage.clickButtonAddToCartRandom();
 
         cartPage.ClickOrderButton();
-
 
         // Step 5 - Leave the [Họ và tên] field empty
         orderPage.EnterFullname("");
