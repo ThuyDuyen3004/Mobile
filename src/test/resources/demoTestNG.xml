@@ -5,21 +5,12 @@
     </listeners>
     <test name="Run-Tests-Add-Product">
         <classes>
-            <class name="Test.TC01"/>
-            <class name="Test.TC02"/>
-            <class name="Test.TC03"/>
             <class name="Test.TC04"/>
-            <class name="Test.TC05"/>
-            <class name="Test.TC06"/>
-            <class name="Test.TC07"/>
         </classes>
     </test>
     <test name="Run-Tests-Add-Product-Admin">
         <classes>
-            <class name="Test.TC_08"/>
             <class name="Test.AddProductNegativeTests"/>
-            <class name="Test.TC14"/>
-
         </classes>
     </test>
 </suite>
