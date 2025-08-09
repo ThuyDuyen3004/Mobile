@@ -59,7 +59,7 @@ public class OrderPage {
         By locator = By.xpath("//i[@class='text-danger']");
 
         try {
-            new WebDriverWait(driver, Duration.ofSeconds(3))
+            new WebDriverWait(driver, Duration.ofSeconds(1))
                     .until(ExpectedConditions.invisibilityOfElementLocated(locator));
         } catch (Exception ignored) {
         }

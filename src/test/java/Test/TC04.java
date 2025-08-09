@@ -13,10 +13,12 @@ import java.util.Locale;
 
 @Listeners(TestListener.class)
 public class TC04 extends BaseTest {
+
     Faker faker = new Faker(new Locale("vi"));
     String validName = faker.name().fullName();
     String validAddress = faker.address().fullAddress();
     String validPassword = Constants.PASSWORD;
+
     @Issue("F003")
     @Test
     @Description("Verify that the order form displays the correct validation messages when entering invalid data or leaving fields empty")
